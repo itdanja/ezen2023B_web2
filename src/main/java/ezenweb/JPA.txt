@@ -1,0 +1,59 @@
+JPA 설치
+	- implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+jdbc(mysql) 설치
+	- runtimeOnly 'com.mysql:mysql-connector-j'
+필수 연동 설정
+    application.properties 파일 에서 연동 코드를 읽어서 자동으로 연동
+    # JDBC 연동
+    # 1. 해당 JDBC 클래스를 호출한다.
+    spring.datasource.driverClassName=JDBC클래스명(MYSQL 등등)
+
+    # 2. 해당 JDBC 클래스 이용한 접속할 DB서버 경로 설정
+    spring.datasource.url=연동할DB URL
+
+    # 3. DB서버의 아이디 와 비밀번호
+    spring.datasource.username=DB서버 계정
+    spring.datasource.password=DB서버 비밀번호
+
+    # 4. DDL( create , drop , alter 등등 ) DML( select , insert , delete , update )
+    spring.jpa.hibernate.ddl-auto = create
+        - (테이블 존재하면) 테이블 지우고 새로운 테이블 생성
+    spring.jpa.hibernate.ddl-auto = update
+        - 기존 레코드를 유지하고 변화가 있는 필드에 대해서 업데이트
+
+    * 연동실패 오류 메시지 : Failed to configure a DataSource: 'url' attribute is not specified and no embedded datasource could be configured.
+
+- JPA : java persistence Api
+    - 왜??? SQL 안쓰고 DB를 조작하기 위해 만들어진 라이브러리
+    - persistence( 영속성 : 프로그램이 종료되어도 사라지지 않는 데이터의 특성 )
+    - 역할
+        - Dao란?? DB연동/조작/결과를 다루는 자바 객체
+            클라이언트 -------->  서버(자바) : 8080 ---- JDBC(DAO) ------> DB(MYSQL) : 3306
+        - JPA
+            클라이언트 -------->  서버(자바) : 8080 ---- JPA ------> DB(MYSQL) : 3306
+    - 핵심도구
+        1. 엔티티     : 자바 객체를 DB가 이해할수 있게 만든 것으로 이를 기반으로 테이블이 만들어진다.
+            엔티티( 개체 ) <----> 하나의 생물체( 테이블 )
+            엔티티 클래스 <----> DB 테이블
+            엔티티 하나의 객체 <----> 테이블의 하나의 레코드
+
+        2. 리파지터리 : 엔티티가 DB 속 테이블에 저장 및 관리(조작) 할수 있도록 하는 인터페이스 입니다.  예) rs+ps
+           ( 인터페이스 : 서로 다른 객체들간의 동일한 기능을 수행하게끔 조작하는 하나의 기능 묶음 ) - 리모콘
+
+- 엔티티 만드는 방법
+    1. 일반 클래스 처럼 클래스 파일 생성한다.
+    2. 클래스위에 @Entity
+    3. PK 필드는 필수 1개 이상 선정 @Id
+        - 엔티티 클래스에 pk가 없으면 오류 : has no identifier
+
+- 리파지터리 만드는 방법
+    1. 일반 인터페이스 처럼 인터페이스 파일 생성한다.
+    2. extends JpaRepository 상속받기
+        extends JpaRepository< 조작할엔티티클래스명 , PK필드의자료형 >
+
+- 리파지터리 객체 이용한 엔티티 조작
+    1. [C] .save( 저장할엔티티 )
+    2. [R] .findAll()
+    2. [R] .findById( 호출할pk번호 )
+    3. [U] X
+    4. [D] .delete( 삭제할엔티티 ) 또는 .deleteById( 삭제할PK번호 )
