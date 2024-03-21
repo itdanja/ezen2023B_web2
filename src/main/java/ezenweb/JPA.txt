@@ -25,6 +25,7 @@ jdbc(mysql) 설치
 
 - JPA : java persistence Api
     - 왜??? SQL 안쓰고 DB를 조작하기 위해 만들어진 라이브러리
+    - ORM 표준 기술 채택한 라이브러리
     - persistence( 영속성 : 프로그램이 종료되어도 사라지지 않는 데이터의 특성 )
     - 역할
         - Dao란?? DB연동/조작/결과를 다루는 자바 객체
@@ -40,7 +41,7 @@ jdbc(mysql) 설치
         2. 리파지터리 : 엔티티가 DB 속 테이블에 저장 및 관리(조작) 할수 있도록 하는 인터페이스 입니다.  예) rs+ps
            ( 인터페이스 : 서로 다른 객체들간의 동일한 기능을 수행하게끔 조작하는 하나의 기능 묶음 ) - 리모콘
 
-- 엔티티 만드는 방법
+- 엔티티 클래스 만드는 방법 ( 테이블 생성 )
     1. 일반 클래스 처럼 클래스 파일 생성한다.
     2. 클래스위에 @Entity
     3. PK 필드는 필수 1개 이상 선정 @Id
@@ -57,3 +58,56 @@ jdbc(mysql) 설치
     2. [R] .findById( 호출할pk번호 )
     3. [U] X
     4. [D] .delete( 삭제할엔티티 ) 또는 .deleteById( 삭제할PK번호 )
+
+========================================================================
+ORM( Object Relational Mapping )
+    - 개발언어와 데이터베이스 연결시 SQL언어가 아닌 개발언어로 접근할수 있도록 해주는 툴
+========================================================================
+JPA 관련 어노테이션
+    1. @Entity : 해당 클래스를 엔티티로 사용 명시
+        - ORM : 객체와 데이터베이스 개체와 연동/매핑/연결 해주는 기법
+        - 자바 클래스 와 데이터베이스의 테이블과 연동
+
+    2. @Id     : primary key 명시
+        - JPA 사용시 1개 이상 무조건 필수!!
+
+    3. @Table( name = "테이블명")   : 해당 엔티티 테이블의 이름 정의
+        - 생략시 해당 클래스명으로 테이블명이 생성
+
+    4. @GeneratedValue( strategy = GenerationType.IDENTITY )    : auto_increment
+
+    5. @Column : 필드
+            @Column(columnDefinition = "DB type") :
+            @Column(name = "필드명") :
+                - 생략시 자바 필드명으로 생성
+            @Column(length = 허용범위자료형크기) : 길이 ( varchar )
+                - 생략시 최대 허용범위
+            @Column(nullable = true) :  null 여부
+                - 생략시 Number 타입 , char 타입은 not null
+                false : not null
+            @Column(  unique = false )  : 중복 여부
+                - 생략시 false
+                true : unique
+    6. 자료형
+            자바                      mysql db
+            int                         int
+            boolean                     bit ( 0 , 1 )
+            byte                        tinyint
+            short                       smallint
+            char                        char(1)
+            float                       float(  )
+            double                      float(  )
+            long                        bigint
+            x                           longtext
+
+
+
+
+
+
+
+
+
+
+
+
