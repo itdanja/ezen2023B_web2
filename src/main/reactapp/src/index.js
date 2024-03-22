@@ -18,9 +18,14 @@ import Clock from './chapter4/Clock';
 // chapter5 실습 
 import CommentList from './chapter5/CommentList';
 
+// chapter7 예제/실습
+import Counter from './chapter7/Counter';
+import UseStateList from './chapter7/UseStateList';
 const root = ReactDOM.createRoot(document.querySelector('#root'));
 root.render( 
-    <CommentList/>
+    // <CommentList/>
+    // <Counter />
+    <UseStateList />
 );
 // !!!!!!!여기가 렌더링 되는 곳이에요
 // root.render( 

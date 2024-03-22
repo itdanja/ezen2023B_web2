@@ -1,0 +1,10 @@
+리액트 프로젝트폴더 
+	- node-modules ( git commit/push X )
+		- git에서 프로젝트 clone/복제 하면 없는 폴더
+		- npm start 불가능. ( node-modules 없어서 불가능 )
+			=> npm update : package.json 파일내 dependencies 라이브러리들의 버전 설치
+			node-modules 다시 폴더 생성 
+	- package.json ( 외부 라이브러리들을 버전 관리 코드 )
+	- src 
+		- index.js
+		
