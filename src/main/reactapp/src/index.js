@@ -21,11 +21,15 @@ import CommentList from './chapter5/CommentList';
 // chapter7 예제/실습
 import Counter from './chapter7/Counter';
 import UseStateList from './chapter7/UseStateList';
+// chapter8 예제/실습
+import ConfirmButton from './chapter8/ConfirmButton';
+
 const root = ReactDOM.createRoot(document.querySelector('#root'));
 root.render( 
     // <CommentList/>
     // <Counter />
-    <UseStateList />
+    // <UseStateList />
+    <ConfirmButton />
 );
 // !!!!!!!여기가 렌더링 되는 곳이에요
 // root.render( 

@@ -99,3 +99,24 @@ JSX 실습 p.107
 props 이란 ? p.143
 	- 정의 : 컴포넌트에 전달 할(매개변수) 다양한 정보( 속성 key : value )를 담고 있는 자바스크립트 객체 
 	- 형태 : 컴포넌트명( props ){ } 
+
+
+이벤트 처리하기 ? p.254
+	- 기존 DOM 방식 
+		<button onclick="JS함수()">버튼</button>
+	- 리액트 DOM 방식 
+		- 다른점 : 1.이벤트 이름이 카멜표기법이다. 2.처리할 함수 그대로 전달한다.
+		1. <button onClick={JS함수}>버튼</button>
+		2. <button onClick={ () => JS함수() }>버튼</button>
+		- 매개변수 전달하는 방법		
+		2. <button onClick={ (evnet) => JS함수( 매개변수1 , 매개변수2 , evnet ) }>버튼</button>
+			* evnet매개변수 : 어떤 이벤트의 결과물 정보 객체 반환
+				- evnet.target : 이벤트가 발생된 마크업
+				
+	- 이벤트 핸들러 : 어떤 이벤트(click, change 등등)가 발생했을때 해당 이벤트를 처리하는 함수.
+	- 이벤트 리스너 : 이벤트가 발생하는것을 계속 듣고 있다는 의미
+		.addEventListener('이벤트타입', 실행할함수)
+
+	
+	
+
