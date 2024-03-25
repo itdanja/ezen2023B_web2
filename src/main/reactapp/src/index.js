@@ -23,13 +23,16 @@ import Counter from './chapter7/Counter';
 import UseStateList from './chapter7/UseStateList';
 // chapter8 예제/실습
 import ConfirmButton from './chapter8/ConfirmButton';
+// chapter9 예제/실습
+import LandingPage from './chapter9/LandingPage';
 
 const root = ReactDOM.createRoot(document.querySelector('#root'));
 root.render( 
     // <CommentList/>
     // <Counter />
     // <UseStateList />
-    <ConfirmButton />
+    // <ConfirmButton />
+    <LandingPage />
 );
 // !!!!!!!여기가 렌더링 되는 곳이에요
 // root.render( 
