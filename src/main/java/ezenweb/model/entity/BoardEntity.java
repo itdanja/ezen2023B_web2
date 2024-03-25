@@ -1,5 +1,6 @@
 package ezenweb.model.entity;
 
+import ezenweb.model.dto.BoardDto;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -37,6 +38,14 @@ public class BoardEntity {
     @ToString.Exclude
     @Builder.Default
     private List<ReplyEntity> replyEntityList = new ArrayList<>();
+
+    public BoardDto toDto(){
+        return BoardDto.builder()
+                .bno( this.bno)
+                .bcontent( this.bcontent )
+                .bview( this.bview )
+                .build();
+    }
 
 }
 /*

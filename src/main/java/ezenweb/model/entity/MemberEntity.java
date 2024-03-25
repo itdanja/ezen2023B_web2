@@ -1,8 +1,10 @@
 package ezenweb.model.entity;
 
+import ezenweb.model.dto.MemberDto;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +13,7 @@ import java.util.List;
 @Table(name = "member")
 @AllArgsConstructor@NoArgsConstructor
 @Getter@Setter@Builder@ToString
+@DynamicInsert
 public class MemberEntity {
     @Id // PK
     @GeneratedValue( strategy = GenerationType.IDENTITY) // AUTO_INCREMENT
@@ -41,6 +44,15 @@ public class MemberEntity {
     @Builder.Default
     private List<ReplyEntity> replyEntityList = new ArrayList<>();
 
+    public MemberDto toDto() {
+        return MemberDto.builder()
+                .mno( this.mno )
+                .memail( this.memail )
+                .mname( this.mname )
+                .mrol( this.mrol )
+                .mpassword( this.mpassword )
+                .build();
+    }
 
 }
 

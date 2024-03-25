@@ -28,6 +28,12 @@ import ConfirmButton from './chapter8/ConfirmButton';
 // chapter9 예제/실습
 import LandingPage from './chapter9/LandingPage';
 
+// chapter9 예제/실습
+import BoardWrite from './component/board/BoardWrite'
+
+// chapter9 예제/실습
+import Index from './component/Index'
+
 const root = ReactDOM.createRoot(document.querySelector('#root'));
 root.render( 
     // <CommentList/>
@@ -35,7 +41,12 @@ root.render(
     // <UseStateList />
     // <ConfirmButton />
     // <LandingPage />
-    <Counter2 />
+    // <Counter2 />
+    // <BoardWrite />
+
+
+    <Index />
+
 );
 // !!!!!!!여기가 렌더링 되는 곳이에요
 // root.render( 
