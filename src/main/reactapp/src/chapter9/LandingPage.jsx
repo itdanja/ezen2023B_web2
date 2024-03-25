@@ -2,7 +2,7 @@ import { useState } from "react";
 import Toolbar from "./Toolbar";
 
 export default function LandingPage(props){
-
+    
     // 1. state 상태 변수 
     const [ isLoggedIn , setIsLoggedIn] = useState(false);
         console.log( isLoggedIn );
