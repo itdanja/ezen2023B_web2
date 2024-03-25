@@ -1,30 +1,42 @@
 package ezenweb.model.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
-@Entity // 해당 클래스와 연동DB내 테이블과 매핑/연결
-@Table( name = "board")
-@Setter
-@NoArgsConstructor@AllArgsConstructor
-@Builder
-public class BoardEntity { // 테이블
+@Entity
+@Table(name = "board")
+@AllArgsConstructor@NoArgsConstructor
+@Getter @Setter@Builder@ToString
+public class BoardEntity {
     @Id // PK
-    @GeneratedValue( strategy = GenerationType.IDENTITY ) // auto_increment
-    private int bno;        // 게시물번호 PK
+    @GeneratedValue( strategy = GenerationType.IDENTITY) // AUTO_INCREMENT
+    private int bno;
 
-    private String btitle;
-    @JoinColumn // fk
-    @ManyToOne  // 다수가 하나에게     M:1
+    @Column( columnDefinition = "longtext") // longtext
+    private String bcontent;
+
+    @Column
+    @ColumnDefault("0")     // int , default 0
+    private int bview;
+
+    // 단방향 : FK 필드
+    @JoinColumn( name="mno_fk")// fk필드명
+    @ManyToOne // 해당 필드 참조
     private MemberEntity memberEntity;
+
+    // 양방향 : 게시물fk
+    @OneToMany( mappedBy = "boardEntity")
+    @ToString.Exclude
+    @Builder.Default
+    private List<ReplyEntity> replyEntityList = new ArrayList<>();
 
 }
 /*
