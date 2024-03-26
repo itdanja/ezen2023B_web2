@@ -25,8 +25,18 @@ import Counter2 from './chapter7/Counter2';
 
 // chapter8 예제/실습
 import ConfirmButton from './chapter8/ConfirmButton';
+
 // chapter9 예제/실습
 import LandingPage from './chapter9/LandingPage';
+
+// chapter10 예제/실습
+import AttendenceBook from './chapter10/AttendenceBook';
+
+// chapter11 예제/실습
+import NameForm from './chapter11/NameForm';
+
+// 
+import SignUp from './component/member/SignUp';
 
 const root = ReactDOM.createRoot(document.querySelector('#root'));
 root.render( 
@@ -35,7 +45,10 @@ root.render(
     // <UseStateList />
     // <ConfirmButton />
     // <LandingPage />
-    <Counter2 />
+    // <Counter2 />
+    // <AttendenceBook />
+    // <NameForm />
+    <SignUp />
 );
 // !!!!!!!여기가 렌더링 되는 곳이에요
 // root.render( 
