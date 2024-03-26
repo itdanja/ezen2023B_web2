@@ -1,7 +1,11 @@
 import { useState } from "react";
 import axios from 'axios'; // axios 라이브러리 호출
+import { useNavigate } from "react-router-dom";
 
 export default function SignUp(props){
+    
+    const navigate = useNavigate();
+
     // 1. 상태변수 
     const [ memail , setMemail ] = useState('')
     const [ mpassword , setMpassword ] = useState('')
@@ -19,8 +23,15 @@ export default function SignUp(props){
          */
          let info = { memail : memail , mpassword  : mpassword , mname : mname }
 
-        axios.post( "http://localhost:8080/member/signup/post.do" , info )
-            .then( response => { console.log( response ) } )
+        axios.post( "/member/signup/post.do" , info )
+            .then( response => { console.log( response ) 
+                
+                if( response.data ){
+                    alert('회원가입 성공');
+                    navigate("/");
+                }else{    alert('회원가입 실패');   }
+            
+            } ).catch( c => { console.log(c); })
 
     }
 

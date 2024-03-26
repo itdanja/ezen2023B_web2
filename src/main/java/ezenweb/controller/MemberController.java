@@ -18,4 +18,18 @@ public class MemberController {
         return memberService.doSignupPost( memberDto );
     }
 
+    @PostMapping("/login/post.do")
+    public boolean doLoginPost(  MemberDto memberDto){
+        return memberService.doLoginPost( memberDto );
+    }
+    @GetMapping("/login/info.do")
+    public MemberDto doLoginInfo(  ){
+        return memberService.doLoginInfo(  );
+    }
+    @GetMapping("/logout.do")
+    public boolean doLogout(  ){
+        return memberService.doLogout(  );
+    }
+
+
 }
