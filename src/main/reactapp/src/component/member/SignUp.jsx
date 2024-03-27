@@ -6,24 +6,22 @@ export default function SignUp(props){
     const [ memail , setMemail ] = useState('')
     const [ mpassword , setMpassword ] = useState('')
     const [ mname , setMname ] = useState('')
-
     // 2. memail 수정함수.
     const onChangeMemail = ( e ) => { setMemail( e.target.value ); }
-
     // 3. 전송 함수 
-    const onSignup = ( e )=>{
-        console.log( memail ); console.log( mpassword ); console.log( mname );
-        /*
-            ContentType : application/json
-            axios.HTTP메소드명( url , data ).then( 응답매개변수 => { 응답 로직 } )
-         */
-         let info = { memail : memail , mpassword  : mpassword , mname : mname }
+    const onSignup = ( e )=>{   console.log( memail ); console.log( mpassword ); console.log( mname );
 
-        axios.post( "http://localhost:8080/member/signup/post.do" , info )
-            .then( response => { console.log( response ) } )
+        let info = { memail : memail , mpassword  : mpassword , mname : mname }
 
+        axios.post( "http://localhost:8080/member/signup/post.do" , info )  // 4xx
+            .then( response => { console.log( response ) // 2xx
+                if( response.data ){
+                    alert('회원가입 성공');
+                    window.location.href = "/member/login"; // <a />
+                }else{    alert('회원가입 실패')   }
+            })
+            .catch( error =>{ console.log(error); } ) // 5xx
     }
-
     return(<>
         <form>
             이메일 : <input  type="text"    value={memail}  onChange={ onChangeMemail }/>  <br/>
