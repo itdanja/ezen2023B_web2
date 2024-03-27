@@ -1,0 +1,22 @@
+route
+	정의 : 
+		- 리액트는 HTML 1개이다. 그러므로 url도 1개다.
+		- 가상URL을 만들어서 가상URL 호출시 특정 컴포넌트 렌더링
+		- 서버Rest( 컨트롤러 mapping주소 ) 와 라우터 가상URL 충돌 주의 ( 충돌시 서버가 우선 )
+		- router란 : (HTTP)경로 연결
+	설치 : 터미널에서 npm i react-router-dom
+	
+	사용법 :
+		1. <BrowserRouter>  : 해당 범위내 가상 브라우저 컴포넌트 
+
+		2. <Routes>			: 실제 컴포넌트 변경되는 곳
+		
+		3. <Route />		: 가상URL 과 연결할 컴포넌트 정의 하는 컴포넌트  
+			속성 
+				1. path : 가상url정의 하는곳 ( 임의로 작성 )
+				2. element : path 요청시 반환할 컴포넌트
+
+		4. 	<Link to="routePath" />			: 가상URL 호출 , 페이지 새로고침x
+				vs
+			<a href="routePath" />			: 페이지 새로고침o , ( 서버(SPRING) 와 통합시 ) 우선순위는 서버controller 
+
