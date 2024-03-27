@@ -1,0 +1,24 @@
+AXIOS
+	정의 : HTTP 비동기 통신를 지원 하는 ( node.js 라이브러리)함수.
+		- 주로 : 서버(spring) 과 데이터 통신할때 
+	모듈 설치 : 터미널에서 npm i axios
+		- 프로젝트내 한번 설치 ( 서버 끄고 )
+	컴포넌트 사용방법
+		1. import : import axios from "axios";
+		2. 
+			axios
+				.HTTP메소드명( 요청url , 요청매개변수 )
+				.then( 응답매개변수 => { } )
+				.catch( 오류매개변수 => { } )
+	
+	.then( response => { } )
+		응답매개변수 : 객체(json) 형식으로 HTPP 정보 객체 반환.
+			* response.data : 응답받은 데이터
+	
+	- 쿼리스트링형식( GET,DELETE (POST,PUT) ) 매개변수 요청 전송 
+		axios.HTTP메소드명( 요청url , { params : 전송객체 } )
+	- 본문(HTTPbody : POST,PUT )전송 
+		axios.HTTP메소드명( 요청url , 전송객체  )
+
+
+

@@ -35,20 +35,14 @@ import AttendenceBook from './chapter10/AttendenceBook';
 // chapter11 예제/실습
 import NameForm from './chapter11/NameForm';
 
-// 
-import SignUp from './component/member/SignUp';
+// chapter0 axios 
+import Axios컴포넌트 from './chapter0/Axios컴포넌트';
 
 const root = ReactDOM.createRoot(document.querySelector('#root'));
 root.render( 
-    // <CommentList/>
-    // <Counter />
-    // <UseStateList />
-    // <ConfirmButton />
-    // <LandingPage />
-    // <Counter2 />
-    // <AttendenceBook />
-    // <NameForm />
-    <SignUp />
+    // <CommentList/> // <Counter />  // <UseStateList />  // <ConfirmButton />
+    // <LandingPage />  // <Counter2 /> // <AttendenceBook />  // <NameForm />  // <SignUp />
+    <Axios컴포넌트 />
 );
 // !!!!!!!여기가 렌더링 되는 곳이에요
 // root.render( 
