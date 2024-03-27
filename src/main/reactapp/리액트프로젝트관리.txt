@@ -8,6 +8,8 @@
 		- npx create-react-app 리액트프로젝트명
 		- npm i axios
 			- npm 설치된 라이브러리들은 package.json
+		- 프록시 서버 
+			,"proxy" : "http://localhost:8080"
 	- src 
 		- index.js
 		

@@ -13,7 +13,7 @@ export default function SignUp(props){
 
         let info = { memail : memail , mpassword  : mpassword , mname : mname }
 
-        axios.post( "http://localhost:8080/member/signup/post.do" , info )  // 4xx
+        axios.post( "/member/signup/post.do" , info )  // 4xx
             .then( response => { console.log( response ) // 2xx
                 if( response.data ){
                     alert('회원가입 성공');
