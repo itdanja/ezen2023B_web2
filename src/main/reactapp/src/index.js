@@ -35,6 +35,12 @@ import AttendenceBook from './chapter10/AttendenceBook';
 // chapter11 예제/실습
 import NameForm from './chapter11/NameForm';
 
+// chapter12 예제/실습
+import Calculator from './chapter12/Calculator';
+
+// chapter13 예제/실습
+import ProfileCard from './chapter13/ProfileCard';
+
 // chapter0 axios 
 import Axios컴포넌트 from './chapter0/Axios컴포넌트';
 // chapter0 Route 
@@ -47,8 +53,9 @@ const root = ReactDOM.createRoot(document.querySelector('#root'));
 root.render( 
     // <CommentList/> // <Counter />  // <UseStateList />  // <ConfirmButton />
     // <LandingPage />  // <Counter2 /> // <AttendenceBook />  // <NameForm />  // <SignUp />
-    // <Axios컴포넌트 />
-    // <Route컴포넌트 />
+    // <Axios컴포넌트 />   // <Route컴포넌트 />
+    // <Calculator />
+    // <ProfileCard />
     <Index />
 );
 // !!!!!!!여기가 렌더링 되는 곳이에요
