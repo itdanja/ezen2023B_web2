@@ -2,12 +2,15 @@ package ezenweb.model.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
 @Table(name = "reply")
 @AllArgsConstructor @NoArgsConstructor
-@Getter @Setter @Builder @ToString
-public class ReplyEntity {
+@Getter @Setter @Builder @ToString@DynamicInsert
+@DynamicUpdate
+public class ReplyEntity  extends BaseTime {
     @Id // PK
     @GeneratedValue( strategy = GenerationType.IDENTITY) // AUTO_INCREMENT
     private int rno;

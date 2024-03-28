@@ -6,6 +6,9 @@ import ezenweb.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/member")
 public class MemberController {
@@ -30,6 +33,16 @@ public class MemberController {
     @GetMapping("/login/info/get.do") // 4. 내정보
     public MemberDto doLoginInfo( ){
         return memberService.doLoginInfo();
+    }
+
+    @GetMapping("/idcheck/get.do") // 4. 내정보
+    public boolean doIdCheckGet( String memail ){
+        return memberService.doIdCheckGet( memail);
+    }
+
+    @GetMapping("/myboard/get.do") // 4. 내정보
+    public List<Map<Object,Object>> doMyBoardGet(  ){
+        return memberService.doMyBoardGet( );
     }
 
 }

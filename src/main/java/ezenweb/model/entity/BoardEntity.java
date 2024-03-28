@@ -3,6 +3,8 @@ package ezenweb.model.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.time.LocalDate;
@@ -15,7 +17,8 @@ import java.util.List;
 @Table(name = "board")
 @AllArgsConstructor@NoArgsConstructor
 @Getter @Setter@Builder@ToString
-public class BoardEntity {
+@DynamicInsert @DynamicUpdate
+public class BoardEntity extends BaseTime {
     @Id // PK
     @GeneratedValue( strategy = GenerationType.IDENTITY) // AUTO_INCREMENT
     private int bno;
