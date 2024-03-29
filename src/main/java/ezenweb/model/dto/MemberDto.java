@@ -1,20 +1,21 @@
 package ezenweb.model.dto;
 
+import ezenweb.model.entity.BoardEntity;
 import ezenweb.model.entity.MemberEntity;
 import ezenweb.model.entity.ReplyEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.ColumnDefault;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor @NoArgsConstructor
-@Getter @Setter @Builder @ToString
-public class MemberDto {
+@Getter @Setter @SuperBuilder @ToString
+public class MemberDto extends BaseTimeDto  {
+
     private int mno;
     private String memail;
     private String mpassword;

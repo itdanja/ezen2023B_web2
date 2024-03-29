@@ -1,0 +1,147 @@
+@ServletComponentScan
+    - 스프링MVC 환경에서 서블릿을 단독적으로 사용할때
+
+@SpringBootApplication
+    - 스프링 에서 웹에 관련된 기능을 주입
+    - 1. Uses Apache Tomcat as the default embedded container 내장 아파치톰캣 설정/실행
+        ip : 톰캣이 설치된 컴퓨터의 ip주소
+        port : 톰캣(소프트웨어) 식별번호
+            프로젝트내 src -> main -> resources -> application.properties
+                server.port = 80
+            * application.properties : 스프링 설정파일 ( MAP 컬렉션프레임워크 타입 )
+
+        http://192.168.17.96:80
+            - HTTP 통신 규약을 이용한 톰캣에 요청
+
+    - 2. including RESTful( GET POST PUT DELETE )
+
+    - 3. applications using Spring MVC( Controller , view , model )
+        - 컴포넌트들을 스캔 해서 빈(객체)를 스프링 컨테이너 등록 ( * 상위 패키지의 클래스는 스캔 불가 )
+            - @Controller
+            - @RestController
+            - @Component
+            - 등등
+
+    - 스프링 실행 방법
+    public static void main(String[] args) {
+        SpringApplication.run( 현재클래스.class );
+    }
+
+Spring MVC
+    1. @Controller
+        - 컨트롤러 역할 : Dao/service 와 view 사이의 통신/중계
+            - 컨트롤러가 view에게 데이터(model) 또는 화면(view) 응답할수 있다.
+            - 스프링MVC 아키텍처로 구성된 스프링컨테이너(저장소)에 컨트롤러객체(빈) 를 등록
+    2. @RestController
+        - @Controller + @ResponseBody 포함
+        - 컨트롤러가 view에게 데이터(model) 만 응답.
+
+        * HTTP 요청 매핑
+            1. @RequestMapping( value = "URL" , method = RequestMethod.XXX )
+                GET : @RequestMapping( value = "URL" , method = RequestMethod.GET )
+                POST : @RequestMapping( value = "URL" , method = RequestMethod.POST )
+                PUT : @RequestMapping( value = "URL" , method = RequestMethod.PUT )
+                DELETE : @RequestMapping( value = "URL" , method = RequestMethod.DELETE )
+                - 주로 : 컨트롤 안에 있는 매핑 함수들의 URL이 공통이 있을때 클래스 위에
+                @RequestMapping("/공통URL")
+
+            2. XXXMapping
+                @PostMapping("URL")     : C 저장
+                @GetMapping("URL")      : R 조회
+                @PutMapping("URL")      : U 수정/저장
+                @DeleteMapping("URL")   : D 삭제
+
+        * HTTP 응답
+            1. @ResponseBody    : 응답(Response) Body(객체) : 응답 데이터를 객체로 하겠다.
+                String --> HTTP contentType --> text/plain
+                객체:컬렉션프레임워크/배열/기본타입 --> HTTP contentType --> application/json
+
+HTTP 요청시 매개변수/데이터 를 보내는 방법
+    < URL 경로 > POST, GET, PUT , DELETE
+    1. 쿼리스트링 : url?key=value&key=value&key=value
+        - 식별이 가능
+        1. key 와 매핑함수의 매개변수명 동일.
+        2. @RequestParam("key") 매개변수        ( 권장 )  가독성
+        3. @RequestParam Map<String,String> map
+        4. Dto dto ( 단 : dto 안에 필드명이 key와 동일해야 한다 )
+
+    2. 경로변수 : url/value1/value2
+        - 식별이 불가능
+        * 매핑함수 Mapping("/ajax2/{매개변수명}/{매개변수명}")
+        1. @PathVariable 매개변수
+        2. @PathVariable("URL매개변수명") 매개변수
+
+    - 사용자가 데이터를 쉽게 볼수 있다. < 보안 취약 > : 보안 필요없으면 가능.
+
+    < http body > : http 안에 내용을 첨부할수 있는 보관소
+        POST / PUT : body 사용 함
+            - 회원가입 , 로그인 , 글쓰기
+        GET / DELETE : body 사용 안함.
+            - 글 전체 목록 , 글 개별 조회 , 글삭제
+
+        contentType
+            1. form ( ajax 기본형태 )
+                쿼리스트링 동일.
+            2. application/json
+                @RequestBody : JSON타입의 데이터를 JAVA 타입으로 자동 매핑
+
+==============================================================================================
+MVC패턴
+                       view             model               DB
+    클라이언트           controller
+                        { JSP }
+MVC패턴2
+
+    클라이언트           view            controller          model          db
+
+MVC패턴2 3티어( 스프링MVC 아키텍처 패턴 )1
+
+                                톰캣 안에 있는 스프링MVC 아키텍처 에 따른 클래스
+                                    ---------------------------------------------------------------------------------------------------------------------------------
+    클라이언트                               view                                    controller                  service             repository(dao)             db
+      브라우저                           resources                                  @RestController             @Service            @Repository
+                    HTTP                                                                                                            @Component
+
+                                        static 정적(HTML,CSS,JS,IMG,MP4등등)
+                                         templates 동적(머스테치)
+
+                                    ---------------------------------------------------------------------------------------------------------------------------------
+
+
+
+MVC패턴2 3티어( 스프링MVC 아키텍처 패턴 )2
+
+1. 클라이언트(유저) view( HTML,JS,CSS,REACT , 스프링프로젝트 resources 폴더내 )
+            |
+            |
+            |   AJAX , AXIOS    ( JS )            data : json
+            |
+            |
+2. 톰캣 서버( controller ) @RestController         data : Dto  / Entity(사용하지 않는다 )
+
+3. 톰캣 서버( Service )    @Service                data : Dto , Entity
+                            Dto ---> Entity         Insert ( JPA Repository 이용한 DB 저장해야 되는데 DTO는 저장 불가능 )
+                                Dto 클래스에 toEntity()
+                            Entity ---> DTO / VO     Select ( Mvc 패턴에서 Entity 사용하는 구역이 Service인 비지니스 로직에서 만 허용 )
+                                Entity 클래스 에  toDto()
+                                - toDto() 변환에 사용 하는 경우에 따라 생성해서 사용.
+                                - 경우의 수가 많아지면 복잡도 올라감... -> Map< Objet , Object >
+                                    - Rest API ( 문자 통신 ) 이용한 외부로 데이터 전송시
+4. 톰캣 서버( Repository ) @Repository
+
+5. DB 서버 ( MYSQL )                              data : SQL
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

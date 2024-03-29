@@ -1,0 +1,55 @@
+1. JS에서 배열을 반복문으로 순회하는 방법
+
+    let array = [ ]
+
+    1. 일반 for문
+        for( let i = 0 ; i < array.length ; i++ ) {
+            array[i]
+        }
+    2-1. 향상된 for문 : in 연산 : 인덱스 순회
+        for( let 반복변수 in array ) {  }
+
+    2-1. 향상된 for문 : of 연산자 : 데이터 순회
+        for( let 반복변수 of array ) {  }
+
+    3.  forEach 함수 제공 : return 없는 함수.
+            - return 없는 관계로 반복문 내부 사용된 데이터를 외부에서 사용 불가능.
+
+        array.forEach( (반복변수) => { })
+            - 예)
+
+                 let 과일상자 =  [ '사과' , '딸기' , '포도'].forEach( ( 과일) -> {
+                    console.log( '과일' );
+                    return 과일+'상자'; // 불가능
+                } )
+                console.log( 과일상자 ) ;   =>  x
+
+    4.  map 함수 제공 : return 있는 함수.
+            - return 있는 관계로 반복하면서 return된 결과를 반환한다.
+            - 예)
+
+                let 과일상자 = [ '사과' , '딸기' , '포도'].map( ( 과일) -> {
+                    console.log( '과일' );
+                    return 과일+'상자'; // 가능
+                } )
+                console.log( 과일상자 ) ;   =>  [ '사과상자' , '딸기상자' , '포도상자']
+
+        array.map( (반복변수) => { })
+
+2. JAVA에서 배열을 반복문으로 순회하는 방법
+
+    List<Object> list = new ArrayList<>();
+
+    1. 일반 for문
+        for( int i = 0 ; i < array.size() ; i++ ) {
+            array[i]
+        }
+
+    2. 향상된 for문 :  : 콜론 : 데이터 순회
+        for( 타입 반복변수 : array ) {  }
+
+    3. forEach 함수 제공 : return 없는 함수.
+        array.forEach( (반복변수) -> { })
+
+    4. map 함수 제공 : return 있는 함수.
+

@@ -1,0 +1,33 @@
+ajax
+    - HTTP 비동기 통신 메소드
+    - jquery( js 라이브러리 )
+    - 사용방법
+        1. HTML에서 jquery 라이브러리 호출한다.
+        <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+        2. js에서 ajax 작성
+    - 기본문법
+        $.ajax( );
+        $.ajax( { } );
+        $.ajax( { url : "" , method : "" } );
+    - ajax 정보 객체 속성
+        1. url : "URL"
+        2. method : "HTTP METHOD"
+        3. success : "HTTP Response"
+            1. success : ( result ) => { console.log( result ); }
+            2. success : function( result ) => { console.log( result ); }
+            3. success : function 함수명( result ) => { console.log( result ); }
+        4. error : "HTTP ERROR MSG"
+        5. data : "HTTP send data"
+            method : get,delete --> 쿼리스트링
+            method : post,put --> body(본문)
+        7. contentType :
+            - 일반 form                       : 기본값 ( application/x-www-form-urlencoded )
+            - 첨부파일 form                     : false ( multipart/form - data )
+            - JS JSON                           : application/json
+        8. processData
+            - processData : false               : 문자형식이 아닌 바이트형식으로 보내는 방법 ( 첨부파일 )
+        9. async : ajax 통신을 동기화(응답오기전까지 대기 상태 ) 비동기화( 응답상태를 대기 안함 )
+            - async : true 기본값 ( 비동기 )
+            - async : false ( 동기화 )
+
+

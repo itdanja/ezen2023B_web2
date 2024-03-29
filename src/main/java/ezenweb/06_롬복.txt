@@ -1,0 +1,27 @@
+- 롬복 설치
+    1. build.gradle
+            compileOnly 'org.projectlombok:lombok'
+            annotationProcessor 'org.projectlombok:lombok'
+    2. (인텔리제이) 마켓플레이스 lombok 설치
+
+- 롬복
+    정의 : @어노테이션 통한 반복 소스코드를 컴파일 과정에서 생성해주는 역할
+
+- 롬복 어노테이션
+    1. @AllArgsConstructor      : 모든 필드를 받는 생성자
+    2. @NoArgsConstructor       : 빈 필드를 받는 생성자 ( 기본생성자 )
+    3. @RequiredArgsConstructor : final 필드(수정불가)를 받는 생성자
+        - fianl : 수정불가능 필드 선언 키워드
+        - static final : 상수 필드 선언 키워드
+    4. @Getter @Setter          : 필드가 private 일때 외부로 부터 간접 접근을 위한 메소드
+    5. @ToString                : 객체 호출시 주소 값 대신 필드 정보 출력 메소드
+        - @ToString.Exclude     : 특정 필드의 @ToString 제거 ( 주로 JPA 연관관계 양방향에서 사용 )
+    6. @Builder                 : 불필요한 생성자 규칙을 제거 ( 기본생성자 필요 ), 빌더 패턴
+        - 상속 필드에 대해서는 제공하지 않는다. 롬복 1.4 이상부터 @SuperBuilder
+        - @Builder.Default      : 빌더 패턴 사용시 값 대입을 없을경우 해당 필드의 초기값으로 사용.
+
+- 필더 패턴
+    - 생성자의 규칙을 좀 더 유연하게 사용할수 있도록 생성자 대신 메소드 제공
+    - 사용 방법
+        클래스명.builder().필드명(값).필드명(값).build();
+

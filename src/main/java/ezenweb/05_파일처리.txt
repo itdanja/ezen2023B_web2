@@ -1,0 +1,102 @@
+
+                --------HTTP 요청 -------->                               <-------빌드(JAVAC)---------
+클라이언트(브라우저)                             아파치 톰캣                                      개발자( 인텔리제이 )
+    유저        <--------HTTP 응답---------       ip 내컴퓨터:localhost / AWS / CAFE24              프로젝트 소스파일
+                                                port : 8080 또는 80
+                                                빌드된 프로젝트
+                                                \ezen2023B_web1\build                           \ezen2023B_web1\src
+
+
+                                                ^
+                                                |
+                                                |   JDBC
+                                                |
+                                                V
+
+                                                MYSQL SERVER
+                                                  ip 내컴퓨터:localhost  / AWS  / CAFE24
+                                                  port : 3306
+= 1. 업로드 =====================================================================================================================
+첨부파일 전송시
+1. 폼 가져온다
+    let signUpForm = document.querySelector('.signUpForm');
+2. 폼객체화
+    let signUpFormData = new FormData( signUpForm );
+3. AJAX 대용량 폼 전송 속성
+    data : signUpFormData ,
+    contentType  : false ,
+    processData  : false ,
+
+(스프링) 컨트롤러에서 첨부파일 매핑할때 = MultipartFile
+    전제조건 : Dto에 MultipartFile 타입 존재
+4.MultipartFile 객체를 서비스로 보낸다.
+5. 서비스가 MultipartFile 업로드 처리
+        // 1. [어디에] 첨부파일을 저장할 경로
+        File file = new File( 저장경로+파일명.확장자 );
+        // 2. [무엇을] 첨부파일 객체
+        multipartFile.transferTo( file );
+
+* 업로드된 파일명을 DB처리 ( 파일 자체를 DB처리 하지 않는다 )
+* 업로드시 첨부파일의 용량 제한 ( 기본값 10MB )
+    - application.properties 용량에 설정이 가능.
+        spring.servlet.multipart.max-file-size = 원하는용량 ( 10GB , 50MB , -1 )
+        spring.servlet.multipart.max-request-size = 원하는용량
+            -1 : 용량제한 없음
+
+
+= 2. 다운로드 =====================================================================================================================
+
+
+스트림 : 실제의 입력이나 출력이 표현된 데이터의 이상화된 흐름 / 데이터가 다니는 통로 / 바이트 단위
+버퍼 : 데이터 전송하는 동안 일시적인 데이터를 보관하는 메모리 영역 / 큐 / 대용량일때 수동 초기화 권장.
+
+                                                                            서버
+클라이언트(브라우저)                                             아파치 톰캣                                              다운로드파일이 모여있는 폴더
+                                                                                                                         C:\Users\504-t\Desktop\ezen2023B_web1\build\resources\main\static\img\
+                -----------1. HTTP 요청(파일명)--------------->
+                                                                2. 해당 경로에 요청한 파일이 있는지 체크
+                                                                        file.exists()
+
+                                                                3.  해당파일을 바이트로 가져오기
+                                                                                                <-------바이트로 가져오기---------
+                                                                                                new BufferedInputStream( new FileInputStream(file) );
+                                                                                                -파일 스트림
+                                                                                                fin.read( bytes );
+                                                                                                -------------------------------
+                                                                                                 바이트1 , 바이트2 , 바이트3 , 바이트4       ppt파일.ppt
+                                                                                                --------------------------------
+                                                                bytes = [
+                                                                        바이트1,
+                                                                        바이트2,
+                                                                        바이트3,
+                                                                        바이트4,
+                                                                ]
+
+                                                                4. 해당 바이트 배열 내보내기
+
+
+                <-----------HTTP 바이트응답--------------
+                HTTP response 스트림                             new BufferedOutputStream( response.getOutputStream() );
+                                            fout.write( bytes );
+                                            -------------------------------
+                                             바이트1 , 바이트2 , 바이트3 , 바이트4
+                                            --------------------------------
+
+                                                                5. 브라우저에게 다운로드 형식에 정보 전달
+                                                                response.setHeader( "Content-Disposition" , "attachment;filename="+URLEncoder.encode( bfile.split("_")[1] , "utf-8") );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
