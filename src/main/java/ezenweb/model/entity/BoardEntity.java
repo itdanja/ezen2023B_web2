@@ -40,7 +40,7 @@ public class BoardEntity extends BaseTime {
     @Builder.Default
     private List<ReplyEntity> replyEntityList = new ArrayList<>();
 
-    // -
+    // - 게시물 출력
     public BoardDto toDto(){
         return  BoardDto.builder()
                 .bno( this.bno )
@@ -52,6 +52,7 @@ public class BoardEntity extends BaseTime {
                 .udate( this.getUdate() )
                 .build();
     }
+
 }
 /*
     create table BoardEntitiy(

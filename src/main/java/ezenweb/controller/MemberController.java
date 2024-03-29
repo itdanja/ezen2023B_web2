@@ -1,10 +1,14 @@
 package ezenweb.controller;
 
+import ezenweb.model.dto.BoardDto;
 import ezenweb.model.dto.MemberDto;
 import ezenweb.model.entity.MemberEntity;
 import ezenweb.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/member")
@@ -30,6 +34,16 @@ public class MemberController {
     @GetMapping("/login/info/get.do") // 4. 내정보
     public MemberDto doLoginInfo( ){
         return memberService.doLoginInfo();
+    }
+
+    @GetMapping("/find/memail/get.do")
+    public boolean doFindEmail( String memail){
+       return memberService.getFindMemail( memail );
+    }
+
+    @GetMapping("/find/myboard/get.do")
+    public List<BoardDto> findByMyBoardList( ){
+        return memberService.findByMyBoardList(  );
     }
 
 }

@@ -21,24 +21,48 @@ jdbc(mysql) 설치
     spring.jpa.hibernate.ddl-auto = update
         - 기존 레코드를 유지하고 변화가 있는 필드에 대해서 업데이트
 
+    # ====================================================  작업시 테스트 확인용
+    # 5. JPA 가 SQL 실행한 결과 보고 있을때 CONSOLE에 실행된 SQL 표시
+    spring.jpa.properties.hibernate.show_sql=true
+    # 6. CONSOLE에 실행된 SQL 표시 할때 엔터처리
+    spring.jpa.properties.hibernate.format_sql=true
+    # 7. 샘플 데이터
+    spring.sql.init.mode=always
+    spring.jpa.defer-datasource-initialization=true
+    # ==================================================== ===========================
+
     * 연동실패 오류 메시지 : Failed to configure a DataSource: 'url' attribute is not specified and no embedded datasource could be configured.
+
+- ORM
+    - Object Relational Mapping : 객체 관계 매핑
+    - 객체지향언어 와 관계형데이터베이스 매핑/연결
+        - 자바에서는 JPA 라이브러리
 
 - JPA : java persistence Api
     - 왜??? SQL 안쓰고 DB를 조작하기 위해 만들어진 라이브러리
     - ORM 표준 기술 채택한 라이브러리
     - persistence( 영속성 : 프로그램이 종료되어도 사라지지 않는 데이터의 특성 )
+        - JAVA [ JVM : 휘발성( 비영속성 ) ]
     - 역할
         - Dao란?? DB연동/조작/결과를 다루는 자바 객체
+            - Connection , PreparedStatement ,  resultset
             클라이언트 -------->  서버(자바) : 8080 ---- JDBC(DAO) ------> DB(MYSQL) : 3306
         - JPA
+            - Repository
             클라이언트 -------->  서버(자바) : 8080 ---- JPA ------> DB(MYSQL) : 3306
     - 핵심도구
-        1. 엔티티     : 자바 객체를 DB가 이해할수 있게 만든 것으로 이를 기반으로 테이블이 만들어진다.
+        1. 엔티티(Entity)     : 자바 객체를 DB가 이해할수 있게 만든 것으로 이를 기반으로 테이블이 만들어진다.
             엔티티( 개체 ) <----> 하나의 생물체( 테이블 )
-            엔티티 클래스 <----> DB 테이블
+            엔티티 클래스 <----> DB 테이블 매핑
             엔티티 하나의 객체 <----> 테이블의 하나의 레코드
+                - Entity entity = new Entity(); -- 비영속성 상태 ( 레코드 저장하기전 )
+                - 영속성 상태
+                    repository.save( entity ) ; -- 영속된 상태 ( 레코드 저장된 결과 , 매핑된 상태 )
+                    repository.find~~~()
+                - 영속 제거
+                    repository.delete()         -- 영속 삭제 ( 레코드에서 제거된 상태 , 매핑 제거 )
 
-        2. 리파지터리 : 엔티티가 DB 속 테이블에 저장 및 관리(조작) 할수 있도록 하는 인터페이스 입니다.  예) rs+ps
+        2. 리파지터리(Repository) : 엔티티가 DB 속 테이블에 저장 및 관리(조작) 할수 있도록 하는 인터페이스 입니다.  예) rs+ps
            ( 인터페이스 : 서로 다른 객체들간의 동일한 기능을 수행하게끔 조작하는 하나의 기능 묶음 ) - 리모콘
 
 - 엔티티 클래스 만드는 방법 ( 테이블 생성 )
@@ -49,6 +73,7 @@ jdbc(mysql) 설치
 
 - 리파지터리 만드는 방법
     1. 일반 인터페이스 처럼 인터페이스 파일 생성한다.
+    2. 인터페이스 위에 @Repository
     2. extends JpaRepository 상속받기
         extends JpaRepository< 조작할엔티티클래스명 , PK필드의자료형 >
 
@@ -58,6 +83,7 @@ jdbc(mysql) 설치
     2. [R] .findById( 호출할pk번호 )
     3. [U] X
     4. [D] .delete( 삭제할엔티티 ) 또는 .deleteById( 삭제할PK번호 )
+    - 그외 추상메소드 직접 정의/규칙
 
 ========================================================================
 ORM( Object Relational Mapping )
