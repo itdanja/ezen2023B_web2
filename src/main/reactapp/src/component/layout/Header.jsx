@@ -17,6 +17,17 @@ export default function Header( props ){
             .catch( e => { })
     } , [] ); 
 
+    const onLogout = () => {
+        axios.get('/member/logout/get.do')
+            .then( r => {   console.log('logOut get');
+                if( r.data ){ //로그아웃을 성공했으면
+                    //window.location.reload(); // 새로고침
+                    // 세션 제거
+                    setLoginInfo( '' );
+                }
+            });
+    }
+
     return (<>
         <div>
             { loginInfo && <span> { loginInfo.memail } 님 안녕하세요. </span> }
@@ -24,6 +35,10 @@ export default function Header( props ){
                 <li> <Link to="/" > 홈 </Link></li>
                 <li> <Link to="/member/signup">회원가입</Link></li>
                 <li> <Link to="/member/login">로그인</Link></li>
+                <li> <button type="button" onClick={ onLogout }>로그아웃</button></li>
+
+                <li> <Link to="/board/write">글쓰기</Link></li>
+                
             </ul>    
         </div>    
     </>)

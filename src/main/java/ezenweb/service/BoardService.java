@@ -19,8 +19,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class BoardService {
     // * 리포지토리 객체
     @Autowired private BoardEntityRepository boardEntityRepository;
@@ -29,7 +31,6 @@ public class BoardService {
     @Autowired private MemberService memberService;
 
     // 1. C
-    @Transactional
     public boolean postBoard( BoardDto boardDto){ //  ======= 테스트 ==========
         MemberDto loginDto =  memberService.doLoginInfo();
         if( loginDto == null ) return false;
@@ -51,24 +52,23 @@ public class BoardService {
         return false;
     }
     // 2. R
-    @Transactional
-    public List<Object> getBoard(){
+    public List<BoardDto> getBoard(){
         // 1. 리포지토리를 이용한 모든 엔티티( 테이블에 매핑 하기전 엔티티 )를 호출
         List<BoardEntity> result = boardEntityRepository.findAll();
-        System.out.println("result = " + result);
-        System.out.println("작성자 : " + result.get(0).getMemberEntity().getMemail() );
+        // 2.
+        List<BoardDto> boardDtoList = new ArrayList<>();
 
-        return null;
+        boardDtoList = result.stream().map( entity -> { return entity.toDto(); }  ).collect(Collectors.toList());
+
+        return boardDtoList;
     }
     // 3. U
-    @Transactional
     public boolean putBoard(){
         BoardEntity boardEntity = boardEntityRepository.findById( 1 ).get();
         boardEntity.setBcontent("JPA수정테스트중");
         return false;
     }
     // 4. D
-    @Transactional
     public boolean deleteBoard(){
         boardEntityRepository.deleteById( 1 );
         return false;

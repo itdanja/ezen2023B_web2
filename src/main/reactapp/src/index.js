@@ -22,6 +22,9 @@ import CommentList from './chapter5/CommentList';
 import Counter from './chapter7/Counter';
 import UseStateList from './chapter7/UseStateList';
 import Counter2 from './chapter7/Counter2';
+import UseMemoCallBack from './chapter7/UseMemoCallBack';
+import UseRefApp from './chapter7/UseRefApp';
+import UseHookApp from './chapter7/UseHookApp';
 
 // chapter8 예제/실습
 import ConfirmButton from './chapter8/ConfirmButton';
@@ -49,13 +52,18 @@ import Route컴포넌트 from './chapter0/Route컴포넌트';
 // web2 라우터 컴포넌트
 import Index from './component/Index';
 
+import DarkOrLight from './chapter14/DarkOrLight';
+
 const root = ReactDOM.createRoot(document.querySelector('#root'));
 root.render( 
     // <CommentList/> // <Counter />  // <UseStateList />  // <ConfirmButton />
     // <LandingPage />  // <Counter2 /> // <AttendenceBook />  // <NameForm />  // <SignUp />
     // <Axios컴포넌트 />   // <Route컴포넌트 />
-    // <Calculator />
-    // <ProfileCard />
+    // <Calculator />  // <ProfileCard />
+    // <UseMemoCallBack />
+    // <UseRefApp />
+    // <UseHookApp />
+    // <DarkOrLight />
     <Index />
 );
 // !!!!!!!여기가 렌더링 되는 곳이에요
