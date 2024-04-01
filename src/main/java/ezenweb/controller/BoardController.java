@@ -20,7 +20,7 @@ public class BoardController {
     }
 
     @GetMapping("/get.do")
-    public List<Object> getBoard(){
+    public List<BoardDto> getBoard(){
         return boardService.getBoard();
     }
     @PutMapping("/put.do")
