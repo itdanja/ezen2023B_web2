@@ -182,8 +182,27 @@ useState() 이란 ? p.215
 				- state 수정할수 있는함수
 				- 1. 호출시 해당 컴포넌트 렌더링
 				- 2. 수정 기준 : 주소값(주로:객체/배열) , 원시타입
+					- 배열, 객체 복사 ( 주소값이 바뀌니까 )
+						- 복사방법
+							1. map( 얇은복사 )
+							2. ...( 스프레드 연산자 )
+
+						배열 복사 : [ ...기존배열명 ]		,	 setState( [...기존배열명 ] )
+							- 안되는 예시 
+								let array = [ 1 , 2 ,3 ];	array[0] = 4;	setState( array );
+							- 해결방안 
+								let array = [ 1 , 2 ,3 ];	array[0] = 4;	setState( [...array] );
+
+						객체 복사 : 
+							- 안되는 예시 
+								let object = { name : '유재석' , age : 12 }; 	object.age = 40;	setState( object );
+							- 해결방안 
+								let object = { name : '유재석' , age : 12 }; 	object.age = 40;	setState( {...object} );
+
+
 				- 3. 이벤트 핸들러 매개변수( prev~~~ )	: 기존 값 호출 
 					setState( (prev~~~) =>  );
+
 useEffect() 이란 ? 
 	1. 정의 : ( 생명주기시점에 정해진함수 실행) 함수 컴포넌트에서 사용되는 훅 중에서 대표 함수 
 	2. 사용법
@@ -195,3 +214,29 @@ useEffect() 이란 ?
 				출생,사망
 			3. useEffect( 함수 , [ state1 , state2 ··· ] )
 				출생,사망,*(의존성배열내 포함된 state가 변경될때)업데이트
+	
+	3. [ ] : 의존성배열 
+
+메모이제이션을 이용한 최적화* 
+	useMemo(  () => { return 값 } , [ 의존성배열 ]) 		: 의존성배열이 변경될때 값 반환 
+		vs 
+	useCallback( ()=>{ 함수() } , [ 의존성배열 ])			: 의존성배열이 변경될때 함수 반환 
+		vs
+	useEffect( () => { } , [의존성배열])
+
+useRef() 이란 ? 
+	1. 정의 : 매번 렌더링될 때마다 항상 같은 ref 객체를 반환하는 훅 
+	2. 사용법
+		1. 선언 : const refValue = useRef( 초기값 );
+		2. 호출 : refValue
+			{ current : 초기값또는값 }
+		3. 값 호출 : refValue.current
+	3. 주의할점
+		1. current속성의 값이 변경되더라도 재렌더링 안된다.
+		2. 주로 사용처 : Form , 통신세션 등등
+	
+
+	
+
+
+
