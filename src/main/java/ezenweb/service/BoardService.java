@@ -3,9 +3,11 @@ package ezenweb.service;
 import ezenweb.model.dto.BoardDto;
 import ezenweb.model.dto.MemberDto;
 import ezenweb.model.entity.BoardEntity;
+import ezenweb.model.entity.BoardImgEntity;
 import ezenweb.model.entity.MemberEntity;
 import ezenweb.model.entity.ReplyEntity;
 import ezenweb.model.repository.BoardEntityRepository;
+import ezenweb.model.repository.BoardImgEntityRepository;
 import ezenweb.model.repository.MemberEntityRepository;
 import ezenweb.model.repository.ReplyEntityRepository;
 import jakarta.transaction.Transactional;
@@ -27,7 +29,8 @@ public class BoardService {
     @Autowired private MemberEntityRepository memberEntityRepository;
     @Autowired private ReplyEntityRepository replyEntityRepository;
     @Autowired private MemberService memberService;
-
+    @Autowired private FileService fileService;
+    @Autowired private BoardImgEntityRepository boardImgEntityRepository;
     // 1. C
     @Transactional
     public boolean postBoard( BoardDto boardDto){ //  ======= 테스트 ==========
@@ -44,6 +47,18 @@ public class BoardService {
             // - FK 대입
         if( saveBoard.getBno() >= 1){ // 글쓰기를 성공했으면
             saveBoard.setMemberEntity( memberEntity );
+
+            // 첨부파일 처리
+            boardDto.getUploads().forEach( (upload)->{
+               String filename = fileService.fileUpload( upload );
+               if( filename != null ){
+                   BoardImgEntity boardImgEntity = BoardImgEntity.builder()
+                           .uuidfilename( filename )
+                           .boardEntity( saveBoard )
+                           .build();
+                   boardImgEntityRepository.save(  boardImgEntity );
+               }
+            });
             return true;
         }
         return false;
@@ -63,6 +78,8 @@ public class BoardService {
             BoardDto boardDto = boardEntity.toDto();
                 // 4. 변환된 dto를 리스트에 담는다.
             boardDtoList.add( boardDto );
+
+
         }
         return boardDtoList;
     }

@@ -27,3 +27,9 @@ insert
     ( '댓글4' , 2 , 1 ),
     ( '댓글5' , 3 , 4 ),
     ( '댓글5' , 1 , 5 );
+
+/* 3. 댓글 샘플 데이터 */
+insert
+    into boardimg( uuidfilename , bno_fk )
+    values( '1.jpg' , 1 ),
+    ( '2.jpg' , 1 );

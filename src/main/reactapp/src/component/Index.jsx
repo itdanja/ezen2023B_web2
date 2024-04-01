@@ -5,6 +5,8 @@ import Footer from "./layout/Footer";
 import SignUp from "./member/SignUp";
 import Login from "./member/Login";
 import React, { useState } from "react";
+import BoardWrite from "./board/BoardWrite";
+import BoardList from "./board/BoardList";
 
 // ============ 컨텍스트 만들기 ============= //
 // 1. React.createContext( 초기값 ) 이용한 컨텍스트 선언  // import React from "react";
@@ -28,8 +30,8 @@ export default function Index( props ){
                         <Route path="/" element = { <Home />} />
                         <Route path="/member/signup" element={ <SignUp /> } />
                         <Route path="/member/login" element={ <Login /> } />
-                        <Route path="/board/write" element = { } />
-                        <Route path="/board" element = { } />
+                        <Route path="/board/write" element = { <BoardWrite /> } />
+                        <Route path="/board" element = { <BoardList /> } />
                     </Routes> 
                     
                     <Footer />
