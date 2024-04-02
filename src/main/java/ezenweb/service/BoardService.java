@@ -3,6 +3,7 @@ package ezenweb.service;
 import ezenweb.model.dto.BoardDto;
 import ezenweb.model.dto.MemberDto;
 import ezenweb.model.entity.BoardEntity;
+import ezenweb.model.entity.BoardImgEntity;
 import ezenweb.model.entity.MemberEntity;
 import ezenweb.model.entity.ReplyEntity;
 import ezenweb.model.repository.BoardEntityRepository;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class BoardService {
@@ -51,6 +53,8 @@ public class BoardService {
     // 2. R
     @Transactional
     public List<BoardDto> getBoard(){
+        // ======================= 1 ============================ //
+        /*
         // 1. 리포지토리를 이용한 모든 엔티티( 테이블에 매핑 하기전 엔티티 )를 호출
         List<BoardEntity> result = boardEntityRepository.findAll( );
         // 2. Entity ---> Dto 변환한다
@@ -61,10 +65,24 @@ public class BoardService {
             BoardEntity boardEntity = result.get(i);
                 // 3. 해당 엔티티를 dto로 변환한다.
             BoardDto boardDto = boardEntity.toDto();
+                    // ---------- 게시물안에 게시물사진
+                    List<String> bimgList = new ArrayList<>();
+                    for( int j = 0 ; j < boardEntity.getBoardImgEntityList().size() ; j++ ){
+                        BoardImgEntity boardImgEntity = boardEntity.getBoardImgEntityList().get(j);
+                        String bimg = boardImgEntity.getBimg();
+                        bimgList.add( bimg );
+                    }
+                    boardDto.setBimgList( bimgList );
                 // 4. 변환된 dto를 리스트에 담는다.
             boardDtoList.add( boardDto );
         }
         return boardDtoList;
+        */
+        // ======================= ===== ============================ //
+        return boardEntityRepository.findAll().stream().map( (boardEntity)->{
+            return boardEntity.toDto();
+        }).collect(Collectors.toList());
+        // ======================= ===== ============================ //
     }
     // 3. U
     @Transactional

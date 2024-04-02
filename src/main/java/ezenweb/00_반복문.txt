@@ -24,7 +24,7 @@
                 } )
                 console.log( 과일상자 ) ;   =>  x
 
-    4.  map 함수 제공 : return 있는 함수.
+    4.  map 함수 제공 : return 있는 함수.  리액트 에서 < 컴포넌트 > 반환시 주로 사용
             - return 있는 관계로 반복하면서 return된 결과를 반환한다.
             - 예)
 
@@ -52,4 +52,15 @@
         array.forEach( (반복변수) -> { })
 
     4. map 함수 제공 : return 있는 함수.
+        array.stream().map( (반복변수) -> { return } ).collect( Collectors.toList() )
+
+-- stream : 흐르는 좁은 시냇물
+    - 데이터의 이상화된 흐름
+
+    - [ 꽃게 , 생선 , 해파리 ] :
+    List< 해물상자 > 해물상자리스트 = [ 꽃게 , 생선 , 해파리 ].stream().map( (해물)->{ return 해물+"상자" } ).collect(  반환타입 ) )
+
+    -
+    해물상자리스트 = [ 꽃게상자 , 생성상자 , 해파리상자 ]
+
 
