@@ -1,5 +1,6 @@
 import axios from "axios"
 import { useEffect, useState } from "react";
+import MediaCard from "./MediaCard";
 
 export default function BaordList( props ){
     // 1. useState 변수 
@@ -19,15 +20,14 @@ export default function BaordList( props ){
     } , [ ] )
 
     return (<>
+        <div style={ { display:"flex" , flexWrap : "wrap"} } >
         {
             boardList.map( ( board ) => {
                 return (        
-                    <div>
-                        작성자 : <span> { board.memail } </span>
-                        내용 : <span> { board.bcontent } </span> 
-                    </div>
+                    <MediaCard board = { board }/>
                 )
             })
         }
+        </div>
     </>)
 }
