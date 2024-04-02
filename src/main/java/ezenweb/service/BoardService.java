@@ -2,6 +2,7 @@ package ezenweb.service;
 
 import ezenweb.model.dto.BoardDto;
 import ezenweb.model.dto.MemberDto;
+import ezenweb.model.dto.PageDto;
 import ezenweb.model.entity.BoardEntity;
 import ezenweb.model.entity.BoardImgEntity;
 import ezenweb.model.entity.MemberEntity;
@@ -11,6 +12,10 @@ import ezenweb.model.repository.MemberEntityRepository;
 import ezenweb.model.repository.ReplyEntityRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +24,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -52,7 +58,8 @@ public class BoardService {
     }
     // 2. R
     @Transactional
-    public List<BoardDto> getBoard(){
+    public PageDto getBoard(int page , String key ,
+                            String keyword , int view ){
         // ======================= 1 ============================ //
         /*
         // 1. 리포지토리를 이용한 모든 엔티티( 테이블에 매핑 하기전 엔티티 )를 호출
@@ -79,10 +86,36 @@ public class BoardService {
         return boardDtoList;
         */
         // ======================= ===== ============================ //
-        return boardEntityRepository.findAll().stream().map( (boardEntity)->{
-            return boardEntity.toDto();
-        }).collect(Collectors.toList());
+//        return boardEntityRepository.findAll().stream().map( (boardEntity)->{
+//            return boardEntity.toDto();
+//        }).collect(Collectors.toList());
         // ======================= ===== ============================ //
+
+        // 페이징처리
+        Pageable pageable = PageRequest.of( page-1 , view  );
+        // 1. 모든 게시물 호출한다.
+        //Page<BoardEntity> boardEntities = boardEntityRepository.findAll( pageable );
+        Page<Map<Object , Object>> boardEntities = boardEntityRepository.findBySearch( key , keyword , pageable );
+
+        // 2.  List<BoardEntity> --> List<BoardDto>
+        List<Map<Object , Object>> boardDtos = new ArrayList<>();
+
+        boardEntities.forEach( ( e  ) -> {   boardDtos.add( e ); } );
+
+        System.out.println("boardDtos = " + boardDtos);
+
+        // 3. 총 페이지수
+        int totalPages = boardEntities.getTotalPages();
+        // 4. 총 게시물수
+        Long totalCount = boardEntities.getTotalElements(); // 요소 : 게시물 1개
+        // 5. pageDto 구성해서 axios에게 전달
+        PageDto pageDto = PageDto.builder()
+                .boardDtos( boardDtos )
+                .totalCount( totalCount )
+                .totalPages( totalPages )
+                .build();
+        return pageDto;  // 3. 리턴
+
     }
     // 3. U
     @Transactional

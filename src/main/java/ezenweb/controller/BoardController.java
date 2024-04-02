@@ -1,6 +1,7 @@
 package ezenweb.controller;
 
 import ezenweb.model.dto.BoardDto;
+import ezenweb.model.dto.PageDto;
 import ezenweb.model.entity.BoardEntity;
 import ezenweb.service.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +22,11 @@ public class BoardController {
     }
 
     @GetMapping("/get.do")
-    public List<BoardDto> getBoard(){
-        return boardService.getBoard();
+    public PageDto getBoard(@RequestParam int page  ,
+                            @RequestParam String key ,
+                            @RequestParam String keyword ,
+                            @RequestParam int view){
+        return boardService.getBoard( page , key , keyword , view );
     }
     @PutMapping("/put.do")
     public boolean putBoard(){
