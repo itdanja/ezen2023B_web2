@@ -7,10 +7,36 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { useContext } from 'react';
+import { LoginInfoContext } from '../Index';
 
 export default function MediaCard( props ) {
 
-  console.log( props ); // {  'board' : board객체{}  }
+  const navigate = useNavigate();
+  const { loginInfo }  = useContext( LoginInfoContext );
+  
+  const onDelete = (event , bno , mno_fk ) => {
+    
+    if( mno_fk != loginInfo.mno ){
+      alert('불가능');
+      return;
+    }    
+
+    axios.delete( '/board/delete.do' , { params : { bno : bno } } )
+      .then( r =>{ 
+        // 1. get 방식 
+        window.location.href="/board";
+        // 2. 라우터 방식 
+          // 1. useNavigate() 훅   , import { useNavigate } from 'react-router-dom';
+            // - const navigate = useNavigate();
+          // 2. navigate( 라우터URL );
+        // 3. props 방식 
+        //props.getBoard();
+      } )
+      .catch( e => {} )
+  }
 
   return (
     <Card sx={{ width: '20%' }} style={ { margin : 10 } }>
@@ -29,8 +55,10 @@ export default function MediaCard( props ) {
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small">Share</Button>
-        <Button size="small">Learn More</Button>
+        {
+          props.board.mno_fk == loginInfo.mno &&
+          <Button size="small" onClick={ ( event ) => onDelete( event , props.board.bno , props.board.mno_fk  )  }>삭제</Button>
+        }
       </CardActions>
     </Card>
   );

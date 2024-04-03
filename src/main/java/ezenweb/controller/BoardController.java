@@ -29,11 +29,11 @@ public class BoardController {
     public boolean putBoard(){
         return boardService.putBoard();
     }
-    @DeleteMapping("/delete.do")
-    public boolean deleteBoard(){
-        return boardService.deleteBoard();
-    }
 
+    @DeleteMapping("/delete.do")
+    public boolean deleteBoard( int bno ){
+        return boardService.deleteBoard( bno );
+    }
 }
 
 

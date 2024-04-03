@@ -109,8 +109,17 @@ public class BoardService {
     }
     // 4. D
     @Transactional
-    public boolean deleteBoard(){
-        boardEntityRepository.deleteById( 1 );
+    public boolean deleteBoard( int bno ){
+        // 1. 회원번호 = 회원서비스에 회원된 정보
+        MemberDto memberDto = memberService.doLoginInfo();
+        if( memberDto == null ) return false; // 비로그인
+        // 2. 내 게시물 확인
+        Optional<BoardEntity> optionalBoardEntity = boardEntityRepository.findById( bno );
+        if( optionalBoardEntity.isPresent() ){
+            if(  optionalBoardEntity.get().getMemberEntity().getMno()  == memberDto.getMno() ){
+                boardEntityRepository.deleteById( bno ); return true;
+            }
+        }
         return false;
     }
 }
