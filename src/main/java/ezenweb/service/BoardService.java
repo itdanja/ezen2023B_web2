@@ -7,6 +7,7 @@ import ezenweb.model.entity.BoardImgEntity;
 import ezenweb.model.entity.MemberEntity;
 import ezenweb.model.entity.ReplyEntity;
 import ezenweb.model.repository.BoardEntityRepository;
+import ezenweb.model.repository.BoardImgEntityRepository;
 import ezenweb.model.repository.MemberEntityRepository;
 import ezenweb.model.repository.ReplyEntityRepository;
 import jakarta.transaction.Transactional;
@@ -29,6 +30,8 @@ public class BoardService {
     @Autowired private MemberEntityRepository memberEntityRepository;
     @Autowired private ReplyEntityRepository replyEntityRepository;
     @Autowired private MemberService memberService;
+    @Autowired private FileService fileService;
+    @Autowired private BoardImgEntityRepository boardImgEntityRepository;
 
     // 1. C
     @Transactional
@@ -46,10 +49,26 @@ public class BoardService {
             // - FK 대입
         if( saveBoard.getBno() >= 1){ // 글쓰기를 성공했으면
             saveBoard.setMemberEntity( memberEntity );
+
+            // 1. 하나씩 업로드 서비스에 업로드 요청
+            boardDto.getUploadList().forEach( (file)->{
+                // 2. 하나씩 업로드 된 파일명 반환 받기
+                String filename = fileService.fileUpload( file );
+                if( filename != null ){
+                    // 3. 하나씩 업로드된 파일명으로 게시물파일엔티티 생성
+                    BoardImgEntity boardImgEntity = BoardImgEntity.builder()
+                            .bimg( filename ) // 방금 위에서 업로드된 파일명을 엔티티에 대입
+                            .boardEntity( saveBoard ) // FK : 게시물FK
+                            .build();
+                    // 4. 엔티티 영속성( 영속성이 필요한 이유 :  DB 저장할려고 => 서버가 종료되면 사라지니까 => 서버가 영구저장 )
+                    boardImgEntityRepository.save( boardImgEntity );
+                }
+            });
             return true;
         }
         return false;
-    }
+    } // f end
+
     // 2. R
     @Transactional
     public List<BoardDto> getBoard(){

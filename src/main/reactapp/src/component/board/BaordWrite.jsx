@@ -27,6 +27,7 @@ export default function BaordWrite( props ){
         <h3>게시물쓰기</h3>
         <form ref={ boardWriteFormRef }>
             <input name="bcontent" type="type" />
+            <input type="file" name="uploadList" multiple accept="image/*"/>
             <button type="button" onClick={ onWrite }> 등록 </button>
         </form>
     </>)
