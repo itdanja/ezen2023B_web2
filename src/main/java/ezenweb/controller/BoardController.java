@@ -25,9 +25,16 @@ public class BoardController {
     public PageDto getBoard(int page , int view ){
         return boardService.getBoard( page , view );
     }
+
+    @GetMapping("/view/get.do")
+    public BoardDto getViewBoard(int bno  ){
+        return boardService.getViewBoard( bno  );
+    }
+
     @PutMapping("/put.do")
-    public boolean putBoard(){
-        return boardService.putBoard();
+    public boolean putBoard( BoardDto boardDto ){
+        System.out.println("boardDto = " + boardDto);
+        return boardService.putBoard( boardDto );
     }
 
     @DeleteMapping("/delete.do")

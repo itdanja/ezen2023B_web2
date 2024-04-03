@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Service
@@ -102,10 +103,22 @@ public class BoardService {
     }
     // 3. U
     @Transactional
-    public boolean putBoard(){
-        BoardEntity boardEntity = boardEntityRepository.findById( 1 ).get();
-        boardEntity.setBcontent("JPA수정테스트중");
-        return false;
+    public boolean putBoard( BoardDto boardDto ){
+        BoardEntity boardEntity = boardEntityRepository.findById( boardDto.getBno() ).get();
+        boardEntity.setBcontent( boardDto.getBcontent() );
+
+        List<String> oldList = boardEntity.getBoardImgEntityList().stream().map((img) -> { return img.getBimg();}).collect(Collectors.toList());
+
+        List<String> aaa = oldList.stream().filter(o -> boardDto.getBimgList().stream()
+                .noneMatch(Predicate.isEqual(o))).collect(Collectors.toList());
+        System.out.println("aaa = " + aaa);
+
+        aaa.forEach( a ->{
+            BoardImgEntity boardImgEntity2 = boardImgEntityRepository.findById(a).get();
+            boardImgEntityRepository.delete(  boardImgEntity2 );
+        });
+
+        return true;
     }
     // 4. D
     @Transactional
@@ -122,6 +135,11 @@ public class BoardService {
         }
         return false;
     }
+
+    public BoardDto getViewBoard(int bno  ){
+        return boardEntityRepository.findById( bno ).get().toDto();
+    }
+
 }
 
 
