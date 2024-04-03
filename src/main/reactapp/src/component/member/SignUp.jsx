@@ -2,10 +2,12 @@ import { useState } from "react";
 import axios from 'axios'; // axios 라이브러리 호출
 
 export default function SignUp(props){
+    
     // 1. 상태변수 
     const [ memail , setMemail ] = useState('')
     const [ mpassword , setMpassword ] = useState('')
     const [ mname , setMname ] = useState('')
+
     // 2. memail 수정함수.
     const onChangeMemail = ( e ) => { setMemail( e.target.value ); }
     // 3. 전송 함수 

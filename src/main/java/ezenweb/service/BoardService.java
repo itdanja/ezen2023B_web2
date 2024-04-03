@@ -2,6 +2,7 @@ package ezenweb.service;
 
 import ezenweb.model.dto.BoardDto;
 import ezenweb.model.dto.MemberDto;
+import ezenweb.model.dto.PageDto;
 import ezenweb.model.entity.BoardEntity;
 import ezenweb.model.entity.BoardImgEntity;
 import ezenweb.model.entity.MemberEntity;
@@ -12,6 +13,9 @@ import ezenweb.model.repository.MemberEntityRepository;
 import ezenweb.model.repository.ReplyEntityRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -71,8 +75,48 @@ public class BoardService {
 
     // 2. R
     @Transactional
-    public List<BoardDto> getBoard(){
-        // ======================= 1 ============================ //
+    public PageDto getBoard( int page , int view){
+        // 1. pageable 인터페이스 이용한 페이징처리
+            // pageable은 page 순서 0부터 시작하기 때문에 page가 1페이지일때 0페이지 변환하기 위해 -1
+        Pageable pageable = PageRequest.of( page-1  , view  );
+            // 1.페이징처리된 엔티티 호출
+        Page<BoardEntity> boardEntityPage = boardEntityRepository.findAll( pageable );
+            // -- List 아닌 Page 타입일때 List 동일한 메소드 사용하고 추가 기능
+                // 1. 전체 페이지수
+            System.out.println("boardEntityPage.getTotalPages()  = " + boardEntityPage.getTotalPages() );
+        int count = boardEntityPage.getTotalPages();
+                // 2. 전페 게시물수
+            System.out.println("boardEntityPage.getTotalElements()  = " + boardEntityPage.getTotalElements() );
+            // 2. 엔티티를 Dto 변환
+        List< Object > data = boardEntityPage.stream().map( (boardEntity)->{
+                return boardEntity.toDto();
+            }).collect(Collectors.toList());
+        // 2. 페이지DTO 반환 값 구성
+        PageDto pageDto = PageDto.builder()
+                .data( data )// 페이징 처리된 레코드들을 대입
+                .page( page )// 현재 페이지 수
+                .count( count  ) // 전체 페이지 수
+                .build();
+        return pageDto;
+        // ======================= ===== ============================ //
+    }
+    // 3. U
+    @Transactional
+    public boolean putBoard(){
+        BoardEntity boardEntity = boardEntityRepository.findById( 1 ).get();
+        boardEntity.setBcontent("JPA수정테스트중");
+        return false;
+    }
+    // 4. D
+    @Transactional
+    public boolean deleteBoard(){
+        boardEntityRepository.deleteById( 1 );
+        return false;
+    }
+}
+
+
+// ======================= 1 ============================ //
         /*
         // 1. 리포지토리를 이용한 모든 엔티티( 테이블에 매핑 하기전 엔티티 )를 호출
         List<BoardEntity> result = boardEntityRepository.findAll( );
@@ -97,23 +141,4 @@ public class BoardService {
         }
         return boardDtoList;
         */
-        // ======================= ===== ============================ //
-        return boardEntityRepository.findAll().stream().map( (boardEntity)->{
-            return boardEntity.toDto();
-        }).collect(Collectors.toList());
-        // ======================= ===== ============================ //
-    }
-    // 3. U
-    @Transactional
-    public boolean putBoard(){
-        BoardEntity boardEntity = boardEntityRepository.findById( 1 ).get();
-        boardEntity.setBcontent("JPA수정테스트중");
-        return false;
-    }
-    // 4. D
-    @Transactional
-    public boolean deleteBoard(){
-        boardEntityRepository.deleteById( 1 );
-        return false;
-    }
-}
+// ======================= ===== ============================ //
