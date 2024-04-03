@@ -1,6 +1,10 @@
 import axios from "axios";
+import { SocketContext } from "../Index";
+import { useContext } from "react";
 
 export default function Login( props ){
+
+    const clientSocket = useContext( SocketContext ).current;
 
     // 1. 로그인 요청 함수.
     const onLogin = ( ) => {
@@ -12,8 +16,7 @@ export default function Login( props ){
         axios.post( '/member/login/post.do' , loginFormData )
             .then( (r) => { console.log(r); 
                 if( r.data ){
-                    alert('로그인 성공');
-                    window.location.href="/";
+                    clientSocket.send('내가 왔따');
                 }else{
                     alert('로그인 실패');
                 }

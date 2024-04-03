@@ -11,6 +11,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import { LoginInfoContext } from '../Index';
+import { CardActionArea } from '@mui/material';
 
 export default function MediaCard( props ) {
 
@@ -38,28 +39,37 @@ export default function MediaCard( props ) {
       .catch( e => {} )
   }
 
+  const onModal = ( index ) => { console.log( index ); 
+    props.handleOpen(index);
+  }
+
   return (
-    <Card sx={{ width: '20%' }} style={ { margin : 10 } }>
-      <CardMedia
-        sx={{ height: 200 }}
-        image={"/uploadimg/"+props.board.bimgList[0] }
-        component="img"
-        alt="green iguana"
-      />
-      <CardContent>
-        <Typography gutterBottom variant="h5" component="div">
-          { props.board.memail }
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          { props.board.bcontent }
-        </Typography>
-      </CardContent>
-      <CardActions>
-        {
-          props.board.mno_fk == loginInfo.mno &&
-          <Button size="small" onClick={ ( event ) => onDelete( event , props.board.bno , props.board.mno_fk  )  }>삭제</Button>
-        }
-      </CardActions>
-    </Card>
+    <>
+      <Card sx={{ width: '20%' }} style={ { margin : 10 } } >
+        <CardActionArea 
+            onClick={ () => onModal( props.index ) }  >
+          <CardMedia
+            sx={{ height: 200 }}
+            image={"/uploadimg/"+props.board.bimgList[0] }
+            component="img"
+            alt="green iguana"
+          />
+          <CardContent>
+            <Typography gutterBottom variant="h5" component="div">
+              { props.board.memail }
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              { props.board.bcontent }
+            </Typography>
+          </CardContent>
+        </CardActionArea>
+        <CardActions>
+          {
+            props.board.mno_fk == loginInfo.mno &&
+            <Button size="small" onClick={ ( event ) => onDelete( event , props.board.bno , props.board.mno_fk  )  }>삭제</Button>
+          }
+        </CardActions>
+      </Card>
+    </>
   );
 }
