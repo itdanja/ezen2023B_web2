@@ -27,3 +27,57 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+// ============================ 스프링 + 리액트 통합 ======================= //
+// 1. 스프링(서버) 2. 리액트(프론트)
+// 2. 스프링이 프론트 파일들을 읽어드리는 위치 ( /resources )
+// * 별도로 리액트 서버를 실행하지 않고 그레이들이 리액트를 강제로 빌드해서 빌드된 파일을 /resources 복사
+// 빌드 란 : 개발자 작성한 코드를 컴파일/실행 한 결과물
+
+// 1. 리액트 코드파일이 있는 리액트프로젝트 폴더 경로 정의 변수
+def frontendDir = "$projectDir/src/main/reactapp";
+// 2. 이동 [ 원본 이동x , 복사 해서 이동 방식 ]
+processResources { dependsOn "copyReactBuildFiles" }
+// 3. 리액트 설치 ( 리액트 라이브러리 가 없으면 npm update 자동으로 해주고 있으면 npm update x )
+task installReact( type : Exec ){
+    workingDir "$frontendDir"
+    inputs.dir "$frontendDir"
+    group = BasePlugin.BUILD_GROUP
+    if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
+        commandLine "npm.cmd" , "audit" , "fix" //   // 윈도우 환경일때 명령어
+        commandLine "npm.cmd" , "install"
+    }else{
+        commandLine "npm" , "audit" , "fix" //    // 윈도우 외 환경일때 명령어
+        commandLine "npm" , "install"
+    }
+}
+// 4. 리액트 실행/빌드
+task buildReact( type: Exec ){
+    dependsOn "installReact"
+    workingDir "$frontendDir"
+    inputs.dir "$frontendDir"
+    group = BasePlugin.BUILD_GROUP
+    if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
+        commandLine "npm.cmd" , "run-script" , "build"
+    }else{  commandLine "npm" , "run-script" , "build"   }
+}
+// 5. 빌드된 파일을 복사(이동)
+task copyReactBuildFiles( type: Copy ){
+    dependsOn "buildReact"
+    from    "$frontendDir/build" // 복사할 파일 위치  [ 어디서 ]
+    into    "$projectDir/src/main/resources/static" // 복사할 파일을 이동할 위치 [ 어디로 ] index.html 인식
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
