@@ -12,7 +12,7 @@ public class FileService {
 
     // 1. 업로드 경로
         // 내장서버 경로
-    String uploadPath = "C:\\Users\\504-t\\Desktop\\ezen2023B_web2\\build\\resources\\main\\static\\uploadimg\\";
+    String uploadPath = "C:\\Users\\MSI\\ezen2023B_web2\\build\\resources\\main\\static\\uploadimg\\";
         // AWS 경로
 
     // 2. multipartFile 존재하는 파일 업로드

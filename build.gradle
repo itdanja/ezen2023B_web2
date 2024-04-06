@@ -22,8 +22,61 @@ dependencies {
     runtimeOnly 'com.mysql:mysql-connector-j' // MYSQL JDBC
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
+    implementation 'org.springframework.boot:spring-boot-starter-websocket' // 웹소켓 라이브러리
 }
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+
+
+// ---------------------------- 리액트(빌드) 통합 ------------------------ //
+// *. 터미널에서 리액트 실행하지 않고 gradle 이 리액트를 빌드해서 빌드된 파일을 스프링쪽으로 이동
+// 1. 리액트 코드파일이 있는 리액트프로젝트 폴더 경로 정의
+def frontendDir = "$projectDir/src/main/reactapp"; // $projectDir/src/main/{리액트프로젝트폴더명}
+// $projectDir : gradle 프로젝트 의 위치
+// 2. 리액트 코드파일을 빌드해서 빌드된 파일을 어디로 이동할지.. 정의
+sourceSets{ // sources[x] source [o]
+    main {
+        resources { srcDirs = ["$projectDir/src/main/resources"] }
+    }
+}
+// 3. 이동[ 원본 이동X ,  복사 이동O ]
+processResources { dependsOn "copyReactBuildFiles" }
+
+// 4. [1] 리액트 설치 [ 리액트 라이브러리 없으면 npm update 자동해주고 있으면 npm update X ]
+task installReact( type : Exec ){
+    //dependsOn "installReact"
+    workingDir "$frontendDir" // 리액트코드가 있는 폴더경로
+    inputs.dir "$frontendDir" // 빌드 했을때 저장할 폴더경로
+    group = BasePlugin.BUILD_GROUP
+    // npm 호출 [ 운영체제 별로 명령어 다름 ] = 강의기준 : 개발(윈도우) / 배포(리눅스)
+    // 1. 운영체제가 window 환경 이면
+    if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
+        // node 명령어
+        commandLine "npm.cmd" , "audit" , "fix"
+        commandLine "npm.cmd" , "install"
+    }else{ // 운영체제가 window가 아니면
+        commandLine "npm" , "audit" , "fix"
+        commandLine "npm" , "install"
+    }
+}
+// 5. [2] 리액트 실행/빌드
+task buildReact( type: Exec ){
+    dependsOn "installReact"
+    workingDir "$frontendDir" // 리액트코드가 있는 폴더경로
+    inputs.dir "$frontendDir" // 빌드 했을때 저장할 폴더경로
+    group = BasePlugin.BUILD_GROUP
+    if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
+        commandLine "npm.cmd" , "run-script" , "build"
+    }else{ // 운영체제가 window가 아니면
+        commandLine "npm" , "run-script" , "build"
+    }
+}
+// 6. [3] 리액트 빌드파일 복사
+task copyReactBuildFiles( type: Copy ){
+    dependsOn "buildReact"
+    from   "$frontendDir/build"    // 복사할 파일이 어디에서
+    into   "$projectDir/src/main/resources/static"  // 복사할 파일을 어디로
 }
