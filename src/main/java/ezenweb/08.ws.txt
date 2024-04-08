@@ -1,0 +1,129 @@
+- HTTP  : 이동 문자 전송 규약(프로토콜)
+        클라이언트                           서버
+                -----------요청---------->
+                <-----------응답----------
+        * HTTP 기반의 통신은 요청 있을경우에만 응답이 가능하다. 무상태 ( 상태유지 안함 )
+
+- websocket
+    1.정의 : ws 프로토콜을 기반으로 클라이언트 와 서버 사이에 *지속적인 양방향 연결
+        클라이언트                           서버          서비스
+                <-----서버연결(HTTP)--------->
+                -----------요청------------>
+                <-----------응답-----------
+
+    2.*지속적인 양방향 연결
+        - 소켓 : 통신의 종착점( 통신했을때 도착 지점 / 엔드포인트 )
+        - 클라이언트소켓 이 서버 소켓으로 부터 연결 요청
+
+    -사용처 : 실시간처리 , 채팅 , 보안 , 알림 등등
+
+        채팅                                              카카오 회사
+        -유재석PC( 클라이언소켓 )
+                <-----서버연결(HTTP기반)--------->
+                -------- (유재석)안녕하세요. ------>
+                <-------- (유재석)안녕하세요. ------
+                 <-------- (신동엽)안녕하세요. ------
+                                                          - 서버PC
+                                                            - 서버소켓( 서버로 들어오기 위한 종착점 )
+                                                            - 접속명단 ( 유재석 , 강호동 , 신동엽 )
+        -강호동PC( 클라이언소켓 )
+                <-----서버연결(HTTP기반)--------->
+                <-------- (유재석)안녕하세요. ------
+                 <-------- (신동엽)안녕하세요. ------
+
+        -신동엽PC( 클라이언소켓 )
+                <-----서버연결(HTTP기반)--------->
+                <-------- (유재석)안녕하세요. ------
+                -------- (신동엽)그래 안녕. ------>
+                 <-------- (신동엽)안녕하세요. ------
+    -소켓 이란 ?
+            클라이언트                            서버
+            1. socket()                         1. socket( ip:port )
+                                                2. bind()               * 바인딩 : 서버소켓 등록
+            3. connect() -----연결요청------>    4. accept()             * 클라이언트 요청 수용
+
+            -----------------------------------------------
+            5. write()  ------------------->   6. read()
+            -----------------------------------------------
+            5. read()  <--------------------   6. write()
+
+            7.close()                           7.close()
+
+
+websocket 구현
+    1. (클라이언트) JS
+        1. 클라이언트 웹소켓 객체 생성
+            new WebSocket( 서버소켓url )
+                - 클라이언 소켓이 생성되면서 서버소켓에게 접속 요청
+        2. 웹소켓객체의 이벤트 함수들의 콜백함수 정의
+            .onopen = () => {}
+            .onmessage =  () => {}
+            .onerror = () => {}
+            .onclose = () => {}
+        3. 서버에게 메시지 전송
+            .send( )
+
+    2. (서버) JAVA/SPRING
+        1. 웹 소켓 라이브러리 설치
+            implementation 'org.springframework.boot:spring-boot-starter-websocket'
+
+        2. 서버 소켓의 핸들러 객체 생성
+            1. 클래스 생성
+            2. 해당 클래스에  @Configuration @EnableWebSocket 주입
+            3. 해당 클래스에 implements WebSocketConfigurer
+            4. registerWebSocketHandlers메소드 오버라이딩(재정의)
+            5. 재정의
+                registry.addHandler( 서버소켓객체 , "url" )
+            - 실습 예제
+            @Configuration
+            @EnableWebSocket
+            public class WebSocketMapping implements WebSocketConfigurer {
+
+                @Autowired private ChatSocket socket;
+
+                @Override
+                public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
+                    registry.addHandler( socket , "/chat");
+                }
+            }
+
+        3. 서버 소켓
+            1. 클래스 생성
+            2. 해당 클래스 @Component 주입
+            3. 해당 클래스 extends TextWebSocketHandler 상속받기
+            4. 메소드 재정의
+                1. 클라이언트 소켓이 접속이 성공적일때.
+                public void afterConnectionEstablished(WebSocketSession session) throws Exception {
+                    System.out.println("session = " + session);
+                }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
