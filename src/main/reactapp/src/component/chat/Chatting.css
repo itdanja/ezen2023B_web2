@@ -1,0 +1,52 @@
+/* 채팅전체구역 */
+.chatbox{  
+	width: 450px;	 margin: 20px auto; 
+	box-shadow: 0px 0px 3px red;
+	/* 구역 그림자 : x축 y축 그림자흐림정도 색상 */
+}
+/* 채팅내용 목록 */
+.chatcont{ 
+	height: 650px; background-color: #BACEE0; padding: 20px;
+	/* 만약에 내용물이 구역보다 커졌을때 */
+	overflow-y: scroll; /* y축 스크롤 */
+}
+/* 채팅입력창 , 전송버튼 구역 */
+.chatbottom{  height: 50px; display: flex; }
+.chatbottom textarea { /* 채팅입력창*/
+	width: 80%;
+	border: 1px solid #e8e8e8;
+	padding: 15px; resize: none;
+}
+.chatbottom button{ /*  전송버튼 */ 
+	width: 20%;
+	border: none;
+	border-radius: 5px;
+	background-color: #FFEB33;
+}
+/* ------------------------------------------------------ */
+
+/* 메시지 내용 */
+.subcont{ display: flex; align-items: flex-end; }
+.date{  font-size: 10px; margin: 0px 5px; } /* 메시지 시간 */
+.content{  
+	padding: 10px; border-radius: 5px; 
+	max-width: 80%; /* 최대 가로사이즈 */
+	word-break: break-all; 	/* 내용일 넘쳤을때 자동줄바꿈 */
+	white-space: pre-wrap;	/* react 주로 사용된 \n -> 줄바꿈 처리 */
+}
+
+/* 보냈을때 = 오른쪽 배치 , 노랑색배경 */
+.rcont{ display: flex; justify-content: flex-end; margin: 10px 0px; }
+.rcont .content{ background-color: #FFEB33; }
+.rcont .subcont{ justify-content: flex-end; }
+
+/* 받을을떄 = 왼쪽 배치 , 흰색 배경 */
+.lcont{ display: flex; justify-content: flex-start; margin: 10px 0px; }
+.lcont .content{ background-color: #FFFFFF; }
+.lcont .subcont{ justify-content: flex-start; }
+
+.lcont .pimg{
+	width: 35px; height: 35px; border-radius: 50%;
+	margin-right: 8px;
+
+}

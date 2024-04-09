@@ -37,4 +37,5 @@ public class ChatSocket extends TextWebSocketHandler {
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         접속명단.remove( session );
     }
+
 }
