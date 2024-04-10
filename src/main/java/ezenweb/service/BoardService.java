@@ -40,6 +40,7 @@ public class BoardService {
     // 1. C
     @Transactional
     public boolean postBoard( BoardDto boardDto){ //  ======= 테스트 ==========
+
         MemberDto loginDto =  memberService.doLoginInfo();
         if( loginDto == null ) return false;
         // 1. 로그인된 회원 엔티티 찾기

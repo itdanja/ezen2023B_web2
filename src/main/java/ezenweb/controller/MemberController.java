@@ -21,15 +21,15 @@ public class MemberController {
         return memberService.doSignupPost( memberDto );
     }
 
-    @PostMapping("/login/post.do") // 2. 로그인
-    public boolean doLoginPost( MemberDto memberDto ){
-        return memberService.doLoginPost( memberDto );
-    }
+//    @PostMapping("/login/post.do") // 2. 로그인
+//    public boolean doLoginPost( MemberDto memberDto ){
+//        return memberService.doLoginPost( memberDto );
+//    }
 
-    @GetMapping("/logout/get.do") // 3. 로그아웃
-    public boolean doLogOutGet( ){
-        return memberService.doLogOutGet();
-    }
+//    @GetMapping("/logout/get.do") // 3. 로그아웃
+//    public boolean doLogOutGet( ){
+//        return memberService.doLogOutGet();
+//    }
 
     @GetMapping("/login/info/get.do") // 4. 내정보
     public MemberDto doLoginInfo( ){
