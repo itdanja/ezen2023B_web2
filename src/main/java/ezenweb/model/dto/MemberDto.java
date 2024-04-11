@@ -27,6 +27,11 @@ public class MemberDto extends BaseTimeDto  {
                 .memail( this.memail )
                 .mpassword( new BCryptPasswordEncoder().encode(  this.mpassword ) )
                 //  new BCryptPasswordEncoder().encode(  암호화 할 데이터  )
+                /* 암호화란 :
+                    암호 : 정보를 이해할 수 없도록  = 사람이 이해할 수 없도록
+                        - 이해할수 없도록 자기만의 방법으로 변경
+                        - 스프링 시큐리티가 제외하는 방법 : bcrypt 암호화 제공
+                */
                 .build();
         // this ?? : 해당 메소드를 호출한 인스턴스
     }
