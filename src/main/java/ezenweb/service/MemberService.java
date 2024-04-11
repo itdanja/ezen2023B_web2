@@ -14,18 +14,74 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
+import org.springframework.security.oauth2.core.OAuth2AuthenticatedPrincipal;
+import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
+import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
-public class MemberService implements UserDetailsService {
+public class MemberService implements UserDetailsService , OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
     @Autowired MemberEntityRepository memberEntityRepository;
+
+    @Override
+    public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
+        // 1. 로그인을 성공한 oauth2 사용자정보(동의항목)의 정보 호출
+        OAuth2User oAuth2User = new DefaultOAuth2UserService().loadUser( userRequest );     System.out.println("oAuth2User = " + oAuth2User);
+        // 2. 인증결과( 카카오 , 네이버 , 구글 )
+        // 2-1 인증한 소셜 서비스 아이디( 각 회사명 ) 찾기
+        String registrationId = userRequest.getClientRegistration().getRegistrationId();   System.out.println("registrationId = " + registrationId);
+        String memail = null; String mname = null;
+        // 2-2 카카오 이면
+        if ( registrationId.equals("kakao") ) {
+            Map<String , Object > kakao_account = (Map<String , Object >)oAuth2User.getAttributes().get("kakao_account");
+            memail = kakao_account.get("email").toString();
+            Map<String , Object > profile =  (Map<String , Object >)kakao_account.get("profile");
+            mname = profile.get("nickname").toString();
+        }
+        // 2-2 네이버 이면
+        if (registrationId.equals("naver") ) {
+            Map<String , Object > response = (Map<String , Object >) oAuth2User.getAttributes().get("response");
+            memail = response.get("email").toString();
+            mname = response.get("nickname").toString();
+        }
+        // 2-2 구글 이면
+        if (registrationId.equals("google") ) {
+            memail = oAuth2User.getAttributes().get("email").toString();
+            mname = oAuth2User.getAttributes().get("name").toString();
+        }
+        // 3 : 일반회원(UserDetails) + OAUTH2(OAuth2User) 통합회원 = DTO 같이 쓰기
+        // 2-1 권한 목록에 추가
+        List<GrantedAuthority> 권한목록 = new ArrayList<>();
+        권한목록.add(  new SimpleGrantedAuthority("ROLE_"+registrationId )  );
+        권한목록.add(  new SimpleGrantedAuthority("ROLE_TEAM1" )  );
+        // 2-2 DTO 만들기
+        MemberDto memberDto = MemberDto.builder()   // oauth2는 패스워드를 알수없다..
+                .memail( memail ).mname( mname ) .등급목록( 권한목록 )    .build();
+        // 2-3 DB 처리
+        // 만약에 처음 접속한 OAUTH2 회원이면 권한을 추가하고 DB처리
+        if( !memberEntityRepository.existsByMemail( memail ) ){  // 해당 이메일이 db에 없으면
+            memberDto.setMrol("USER");
+            // 임의 패스워드[ oauth2 패스워드가 필요없다-무조건 , db null 피하기 위해서 / 패스워드를 이름으로 설정   ]
+            memberDto.setMpassword( new BCryptPasswordEncoder().encode( mname ) );
+            // -------------------- ------------------------------------------------ -------------------- //
+            memberEntityRepository.save( memberDto.toEntity() );
+        }else{ //만약에 처음 접속이 아니면  기존 권한을 db에서 가져와서 넣어주기.
+            memberDto.setMrol( memberEntityRepository.findByMemail( memail).getMrol() );
+        }
+        // 권한 추가
+        memberDto.get등급목록().add( new SimpleGrantedAuthority( "ROLE_"+memberDto.getMrol() ) );
+
+        return memberDto;
+    }
 
     // - ( 시큐리티 ) 로그인 서비스 커스텀 ( implements UserDetailsService )
     @Override
@@ -35,19 +91,20 @@ public class MemberService implements UserDetailsService {
         // 2. 입력받은 아이디로  실제 아이디와 실제 (암호화된)패스워드 // memail 이용한 회원엔티티 찾기
         MemberEntity memberEntity = memberEntityRepository.findByMemail( memail );
 
+        if( memberEntity == null ){   return null;    }
+
         // - ROLE 부여
         List<GrantedAuthority> 등급목록 = new ArrayList<>();
-        등급목록.add( new SimpleGrantedAuthority("ROLE_USER")); // ROLE_등급명
+        등급목록.add( new SimpleGrantedAuthority( "ROLE_"+memberEntity.getMrol() )); // ROLE_등급명
 
         // 3.  UserDetails 반환 [ 1.실제 아이디 2. 실제 패스워드 ]
             // UserDetails 목적 : Token에 입력받은 아이디/패스워드 검증하기위한 실제 정보 반환.
-        UserDetails userDetails = User.builder()
-                .username( memberEntity.getMemail() )   // 실제 아이디
-                .password( memberEntity.getMpassword() ) // 실제 비밀번호(암호화)
-                .authorities( 등급목록 ) // ROLE 등급
+        return MemberDto.builder()
+                .memail( memberEntity.getMemail() )   // 실제 아이디
+                .mpassword( memberEntity.getMpassword() ) // 실제 비밀번호(암호화)
+                .등급목록( 등급목록 ) // ROLE 등급
                 .build();
 
-        return userDetails;
     }
 
     // 1. 회원가입 ( 시큐리티 사용시 패스워드 암호화 필수 )
@@ -108,9 +165,9 @@ public class MemberService implements UserDetailsService {
         // 2. 만약에 로그인 상태가 아니면
         if( object.equals("anonymousUser" ) ){ return  null; } // anonymous : 익명 <--> 비로그인
         // 3. 로그인 상태이면 UserDetails 타입 변환
-        UserDetails userDetails = (UserDetails)object;
+        MemberDto memberDto = (MemberDto)object;
         // 4. 로그인 성공한 엔티티 찾기
-        MemberEntity m = memberEntityRepository.findByMemail( userDetails.getUsername() );
+        MemberEntity m = memberEntityRepository.findByMemail( memberDto.getUsername() );
         // 5. 회원정보( 비밀번호 제외 권장 ) 반환 ( 주로 다른 서비스나 리액트 사용중 )
         return MemberDto.builder()
                 .memail(m.getMemail()) .mname( m.getMname() ).mno( m.getMno() )
