@@ -7,6 +7,9 @@ import ezenweb.model.entity.MemberEntity;
 import ezenweb.model.repository.MemberEntityRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -16,11 +19,18 @@ import java.util.Map;
 import java.util.Optional;
 
 @Service
-public class MemberService {
+public class MemberService implements UserDetailsService {
 
     @Autowired MemberEntityRepository memberEntityRepository;
 
-    // 1. 회원가입
+    // - ( 시큐리티 ) 로그인 커스텀
+    @Override
+    public UserDetails loadUserByUsername(String memail) throws UsernameNotFoundException {
+            System.out.println("memail = " + memail); // 로그인창에서 입력받은 아이디
+        return null;
+    }
+
+    // 1. 회원가입 ( 시큐리티 사용시 패스워드 암호화 필수 )
     public boolean doSignupPost(  MemberDto memberDto){ System.out.println("memberDto = " + memberDto);
         // --  Dao 아닌 엔티티 이용한 레코드 저장하는 방법
         // 1. 엔티티를 만든다.

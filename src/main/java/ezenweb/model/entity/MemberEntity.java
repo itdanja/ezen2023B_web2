@@ -20,7 +20,7 @@ public class MemberEntity extends BaseTime {
     @Column( length = 50 , unique = true )      // varchar(50) unique
     private String memail;
 
-    @Column( length = 30 )                      // varchar(30)
+    @Column( length = 255 )                      // varchar(255)
     private String mpassword;
 
     @Column( length = 20   , nullable = false) // varchar(20) , not null

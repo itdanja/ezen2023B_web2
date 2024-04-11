@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.ColumnDefault;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -22,8 +23,10 @@ public class MemberDto extends BaseTimeDto  {
     private String mrol;
     // - dto를 엔티티로 변환하는 메소드 // C
     public MemberEntity toEntity(){
-        return MemberEntity.builder()    .mname( this.mname )
-                .memail( this.memail ) .mpassword( this.mpassword )
+        return MemberEntity.builder().mname( this.mname )
+                .memail( this.memail )
+                .mpassword( new BCryptPasswordEncoder().encode(  this.mpassword ) )
+                //  new BCryptPasswordEncoder().encode(  암호화 할 데이터  )
                 .build();
         // this ?? : 해당 메소드를 호출한 인스턴스
     }

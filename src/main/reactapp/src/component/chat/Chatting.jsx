@@ -5,7 +5,6 @@ import styles from './Chatting.css'
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import moment from 'moment'; // $ npm i moment
 
 
 export default function Chatting( props ) {
@@ -41,7 +40,6 @@ export default function Chatting( props ) {
             msg : msgInput ,                // 작성된 내용
             fromMname : loginInfo.mname ,    // 현재 로그인 작성자
             type : 'msg',
-            date : moment().format('a h:mm:ss') 
         }
         // 3. 연결된 서버소켓에게 메시지 보내기
             // send() : 데이터 타입 : 텍스트(HTTP 프로토콜)
@@ -97,7 +95,6 @@ export default function Chatting( props ) {
             msg : emo , // 이미티콘 식별자 
             fromMname : loginInfo.mname, // 작성자 
             type : 'emo', // 메시지 타입 ( 출력시 식별하기 위해 )
-            date : moment().format('a h:mm:ss') 
         }
         clientSocket.current.send( JSON.stringify(info) );
         // - 드롭다운 닫기
@@ -126,7 +123,7 @@ export default function Chatting( props ) {
                                     (
                                         <div className="rcont">
                                             <div className="subcont">
-                                                <div className="date">  { m.date } </div>
+                                                <div className="date">  오전 10:31 </div>
                                                 { typeHTML(m) }
                                             </div>
                                         </div>
@@ -137,7 +134,7 @@ export default function Chatting( props ) {
                                             <div className="name">{ m.fromMname } </div>
                                             <div className="subcont">
                                                 { typeHTML(m) }
-                                                <div className="date"> { m.date } </div>
+                                                <div className="date"> 오전 10:31 </div>
                                             </div>
                                         </div>
                                     </div>

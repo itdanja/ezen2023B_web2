@@ -1,0 +1,51 @@
+스프링 시큐리티
+    -정의 : 인가, 인증 관련 아키텍처/기능 제공
+        - 인가 : 특정 리소스(자원)에 접근하기 위한 권한이 맞는지 확인후 발급      - 예) 로그인
+        - 인증 : 특정 리소스(자원)에 접근하기 위한 발급된 권한 확인             - 예) 세션 정보
+            - 권한 : 특정 리소스(자원)에 접근하기 위한 권리가 주어짐
+
+    - 대표 기능
+        1. 로그인 2.로그아웃 3,소셜로그인 4.csrf공격(body사용금지)방지 5.토큰(징표/인증권한상태) 등등
+
+    - 앞전에 로그인/로그아웃 컨트롤러를 구현했다면 코드 제거
+        - 이유 : 시큐리티가 로그인 과 로그아웃
+    - 용어
+        - 1. 인증(Authorization)
+        - 2. 토큰(증표/인증결과 정보)
+        - 3. 인증하다( authorize )
+        - 4. 인증됨( authenticated )
+
+- 구현( 버전 차이 존재 : 현 강의 기준 Spring Security6.x )
+    1. 그레이들에 라이브러리 추가
+        implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    2. 스프링 서버 실행
+            username : user
+            userpassword : 콘솔 Using generated security password 확인
+
+    3. 시큐리티의 필터 커스텀
+        1. SecurityConfig 클래스 선언
+        2. SecurityFilterChain 반환 함수 정의
+            @Bean
+            SecurityFilterChain filterChain( HttpSecurity http ) throws Exception{
+                http.authorizeHttpRequests( (매개변수) -> { 매개변수.requestMatchers( AntPathRequestMatcher.antMatcher("PATH") ).권한제한함수 } )
+            }
+            권한제한함수
+                1. .permitAll()     : 권한이 없어도 모두 허용
+                2. .authenticated() : 권한 있으면 허용
+                3. .hasAnyRole()    : 권한 있고 해당 특정 ROLE 이면 허용
+                    .hasRole("ROLE명")
+                    .hasRole("ROLE명","ROLE명")
+
+    4. 로그인 커스텀
+
+
+
+
+
+
+
+
+
+
+
