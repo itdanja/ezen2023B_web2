@@ -14,6 +14,10 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
+import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -23,21 +27,35 @@ import java.util.Map;
 import java.util.Optional;
 
 @Service
-public class MemberService implements UserDetailsService {
+public class MemberService
+        implements UserDetailsService ,
+        OAuth2UserService<OAuth2UserRequest , OAuth2User > {
+
+    // - ( 시큐리티/소셜회원 ) 로그인 서비스 커스텀
+    @Override
+    public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
+
+        return null;
+    }
 
     @Autowired MemberEntityRepository memberEntityRepository;
 
-    // - ( 시큐리티 ) 로그인 서비스 커스텀 ( implements UserDetailsService )
-    @Override
+    // - ( 시큐리티/일반회원 ) 로그인 서비스 커스텀 ( implements UserDetailsService )
+    @Override // 역할 :
     public UserDetails loadUserByUsername(String memail) throws UsernameNotFoundException {
         // 1. 로그인창에서 입력받은 아이디
         System.out.println("memail = " + memail);
         // 2. 입력받은 아이디로  실제 아이디와 실제 (암호화된)패스워드 // memail 이용한 회원엔티티 찾기
         MemberEntity memberEntity = memberEntityRepository.findByMemail( memail );
-
+        // - 만약에 해당 입력한 이메일의 엔티티가 없으면
+        if( memberEntity == null ){ // 아이디 없을때
+            throw new UsernameNotFoundException("없는 아이디"); // 강제 예외 발생
+        } // UserDetails 가 null 이면 패스워드 검증 실패 했기때문에
         // - ROLE 부여
-        List<GrantedAuthority> 등급목록 = new ArrayList<>();
-        등급목록.add( new SimpleGrantedAuthority("ROLE_USER")); // ROLE_등급명
+            // GrantedAuthority : 권한을 의미를 저장 클래스
+                // SimpleGrantedAuthority("ROLE_문자형식") : 문자형식의 권한 저장
+        List< GrantedAuthority > 등급목록 = new ArrayList<>();
+        등급목록.add( new SimpleGrantedAuthority("ROLE_"+memberEntity.getMrol() ) ); // ROLE_등급명
 
         // 3.  UserDetails 반환 [ 1.실제 아이디 2. 실제 패스워드 ]
             // UserDetails 목적 : Token에 입력받은 아이디/패스워드 검증하기위한 실제 정보 반환.
@@ -103,7 +121,7 @@ public class MemberService implements UserDetailsService {
 //        }
 //        return null;
         // 1. ( 시큐리티를 사용했을떄 ) Principal : 본인/주역/주체자 : 브라우저마다 1개
-        Object object = SecurityContextHolder.getContext() .getAuthentication().getPrincipal();
+        Object object = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         System.out.println("object = " + object);
         // 2. 만약에 로그인 상태가 아니면
         if( object.equals("anonymousUser" ) ){ return  null; } // anonymous : 익명 <--> 비로그인

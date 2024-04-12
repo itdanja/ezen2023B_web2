@@ -24,6 +24,7 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     implementation 'org.springframework.boot:spring-boot-starter-websocket' // 웹소켓 라이브러리
     implementation 'org.springframework.boot:spring-boot-starter-security' // 스프링시큐리티
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client' // oauth2 라이브러리
 }
 
 tasks.named('test') {
