@@ -42,7 +42,7 @@ export default function MediaCard( props ) {
     <Card sx={{ width: '20%' }} style={ { margin : 10 } }>
       <CardMedia
         sx={{ height: 200 }}
-        image={"/uploadimg/"+props.board.bimgList[0] }
+        image={props.board.bimgList[0] }
         component="img"
         alt="green iguana"
       />
