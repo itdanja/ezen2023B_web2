@@ -16,7 +16,7 @@ export default function Chatting( props ) {
     if( !clientSocket.current ){
         // ====== (클라이언트) 웹소켓 구현 ====================
             // 1. new WebSocket( '서버소켓url; ); // 비동기 // 서버소켓에게 접속 요청
-        clientSocket.current = new WebSocket( 'ws://192.168.17.96:8080/chat' );      console.log( clientSocket );     // 확인
+        clientSocket.current = new WebSocket( 'ws://localhost:8080/chatConnect' );      console.log( clientSocket );     // 확인
         // onclose // onerror // onmessage // onopen : WebSocket객체내 포함된 메소드들
             // 2. 각 메소드 정의
                 // - 1. 클라이언트소켓이 close 발생했을때 콜백함수 정의

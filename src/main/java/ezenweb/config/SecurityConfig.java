@@ -83,6 +83,16 @@ public class SecurityConfig { // 시큐리티를 커스텀 하는 곳
         } );
                     // Endpoint : 종착점
                     // 세션 : 1. (톰캣)http서블릿세션 2, (JS)Session 3. (WS)WebSocketSession
+
+        // 7. 예외(오류)페이지 404 핸들러
+        http.exceptionHandling((exceptionConfig) ->
+                exceptionConfig
+                        .accessDeniedHandler(
+                                (request, response, accessDeniedException) -> {
+                                    response.sendRedirect("/error403");
+                                }
+                        ) );
+
         return http.build();
     } // m end
     // 2. 시큐리티가 패스워드 검증할때 사용할 암호화 객체
